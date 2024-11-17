@@ -140,8 +140,9 @@ public class EventTicketingSystem {
         System.out.println("Running: " + running);
         System.out.println("Vendors: " + numVendors);
         System.out.println("Customers: " + numCustomers);
-        System.out.println("Tickets in pool: " + ticketPool.getAvailableTickets());
+        System.out.println("Tickets in pool: " + ticketPool.getAvailableTicketsInPool());
         System.out.println("Sold out Tickets: " + ticketPool.getSoldOutTickets());
+        System.out.println("Total Tickets to be sold out: " + ticketPool.getToBeSoldOutTickets());
     }
 
     public static void main(String[] args) {

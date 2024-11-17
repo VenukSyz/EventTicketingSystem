@@ -13,6 +13,12 @@ public class Customer extends User{
     public void run() {
         try {
             while (true) {
+                synchronized (this.getTicketPool()) {
+                    if (this.getTicketPool().getToBeSoldOutTickets() < this.ticketsPerRetrieval) {
+                        System.out.println(this.getName() + " stopping: Not enough tickets left to retrieve.");
+                        break;
+                    }
+                }
                 boolean success = this.getTicketPool().removeTickets(ticketsPerRetrieval, this.getName());
 
                 if (!success) {
