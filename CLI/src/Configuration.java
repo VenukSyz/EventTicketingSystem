@@ -111,6 +111,7 @@ public class Configuration {
                 ticketsPerRetrieval = data.ticketsPerRetrieval;
                 retrievalIntervalMilliseconds = data.retrievalIntervalMilliseconds;
                 System.out.println("Configuration loaded from " + fileName + "\n");
+                displayLoadedConfiguration();
             } else {
                 System.out.println("Configuration file is missing required data or contains invalid values.\n");
             }
@@ -141,6 +142,18 @@ public class Configuration {
                 data.totalTickets <= data.maxTicketCapacity &&
                 data.ticketsPerRelease <= (data.maxTicketCapacity - data.totalTickets) &&
                 data.ticketsPerRetrieval <= data.maxTicketCapacity;
+    }
+
+    // Method to display the loaded configuration
+    private static void displayLoadedConfiguration() {
+        System.out.println("=== Loaded Configuration ===");
+        System.out.println("Max Ticket Capacity: " + maxTicketCapacity);
+        System.out.println("Total Tickets: " + totalTickets);
+        System.out.println("Tickets Per Release: " + ticketsPerRelease);
+        System.out.println("Release Interval (ms): " + releaseIntervalMilliseconds);
+        System.out.println("Tickets Per Retrieval: " + ticketsPerRetrieval);
+        System.out.println("Retrieval Interval (ms): " + retrievalIntervalMilliseconds);
+        System.out.println("============================\n");
     }
 
     public static int getMaxTicketCapacity() {

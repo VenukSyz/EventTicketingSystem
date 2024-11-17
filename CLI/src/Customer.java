@@ -1,8 +1,4 @@
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 public class Customer extends User{
-    private static final Logger logger = Logger.getLogger(Customer.class.getName());
     private static long customerCounter = 0;
     private final int ticketsPerRetrieval;
     private final int retrievalIntervalMilliseconds;
@@ -20,14 +16,14 @@ public class Customer extends User{
                 boolean success = this.getTicketPool().removeTickets(ticketsPerRetrieval, this.getName());
 
                 if (!success) {
-                    logger.warning(this.getName() + " could not retrieve tickets");
+                    System.out.println(this.getName() + " could not retrieve tickets");
                 }
 
                 Thread.sleep(retrievalIntervalMilliseconds);
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            logger.log(Level.SEVERE, this.getName() + " interrupted.");
+            System.out.println(this.getName() + " interrupted.");
         }
     }
 }
