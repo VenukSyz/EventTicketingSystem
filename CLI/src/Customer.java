@@ -15,21 +15,27 @@ public class Customer extends User{
             while (true) {
                 synchronized (this.getTicketPool()) {
                     if (this.getTicketPool().getToBeSoldOutTickets() < this.ticketsPerRetrieval) {
-                        System.out.println(this.getName() + " stopping: Not enough tickets left to retrieve.");
+                        synchronized (System.out) {
+                            System.out.println(this.getName() + " stopping: Not enough tickets left to retrieve.");
+                        }
                         break;
                     }
                 }
                 boolean success = this.getTicketPool().removeTickets(ticketsPerRetrieval, this.getName());
 
                 if (!success) {
-                    System.out.println(this.getName() + " could not retrieve tickets");
+                    synchronized (System.out) {
+                        System.out.println(this.getName() + " could not retrieve tickets");
+                    }
                 }
 
                 Thread.sleep(retrievalIntervalMilliseconds);
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            System.out.println(this.getName() + " interrupted.");
+            synchronized (System.out) {
+                System.out.println(this.getName() + " interrupted.");
+            }
         }
     }
 }

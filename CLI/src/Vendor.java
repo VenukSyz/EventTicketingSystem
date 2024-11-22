@@ -16,7 +16,9 @@ public class Vendor extends User{
             while (true) {
                 boolean ticketsAdded = this.getTicketPool().addTickets(ticketsPerRelease, this.getName());
                 if (!ticketsAdded) {
-                    System.out.println(this.getName() + " is stopping as all tickets have been added.");
+                    synchronized (System.out) {
+                        System.out.println(this.getName() + " is stopping as all tickets have been added.");
+                    }
                     break;
                 }
 
@@ -24,7 +26,9 @@ public class Vendor extends User{
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            System.out.println(this.getName() + " interrupted");
+            synchronized (System.out) {
+                System.out.println(this.getName() + " interrupted");
+            }
         }
     }
 }

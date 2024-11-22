@@ -1,6 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ConfigurationService } from '../../services/configuration.service';
+import { Configuration } from '../../model/class/configuration';
+import { IApiResponseModel } from '../../model/interface/api';
 
 @Component({
   selector: 'app-configuration-form',
@@ -9,24 +12,33 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './configuration-form.component.html',
   styleUrl: './configuration-form.component.css'
 })
-export class ConfigurationFormComponent {
-  maxTicketCapacity: number = 0;
-  totalTickets: number = 0;
-  ticketsPerRelease: number = 0;
-  releaseIntervalMilliseconds: number = 0;
-  ticketsPerRetrieval: number = 0;
-  retrievalIntervalMilliseconds: number = 0;
+export class ConfigurationFormComponent implements OnInit{
 
-  isTotalTicketsValid() : boolean {
-    return this.totalTickets <= this.maxTicketCapacity;
+  configurationService: ConfigurationService = inject(ConfigurationService);
+  configurationObj: Configuration = new Configuration();
+  configurationList = signal<Configuration[]>([])
+
+  ngOnInit(): void {
+      this.loadConfigurations();
   }
 
-  isTicketPerReleaseValid() : boolean {
-    return this.ticketsPerRelease <= this.maxTicketCapacity - this.totalTickets;
+  loadConfigurations() {
+    this.configurationService.getAllConfigurations().subscribe((result: IApiResponseModel) => {
+      debugger;
+      this.configurationList.set(result.data);
+    });
   }
 
-  isTicketsPerRetrievalValid() : boolean {
-    return this.ticketsPerRetrieval <= this.maxTicketCapacity
+  get isTotalTicketsValid() : boolean {
+    return this.configurationObj.totalTickets <= this.configurationObj.maxTicketCapacity;
+  }
+
+  get isTicketPerReleaseValid() : boolean {
+    return this.configurationObj.ticketsPerRelease <= this.configurationObj.maxTicketCapacity - this.configurationObj.totalTickets;
+  }
+
+  get isTicketsPerRetrievalValid() : boolean {
+    return this.configurationObj.ticketsPerRetrieval <= this.configurationObj.maxTicketCapacity
   }
 
 }

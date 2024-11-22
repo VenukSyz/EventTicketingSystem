@@ -1,182 +1,167 @@
 <h1 class="text-center">Save & Edit Configurations</h1>
-    <div class="row pt-3 d-flex justify-content-center">
-        <div class="col-10">
-            <div class="card">
-                <div class="card-header bg-success text-center">
-                    Configuration Form
-                </div>
-                <div class="card-body">
-                    <form #form="ngForm">
-                        <div class="row justify-content-center">
-                            <div class="col-5 d-flex align-items-center">
-                                <label for="max_tickets" style="width: 450px;">Max ticket capacity: </label>
-                                <div class="col-6">
-                                    <input type="number" id="max_tickets" #max_Tickets="ngModel" name="max_tickets"
-                                        required pattern="^[1-9]\d*$" [(ngModel)]="maxTicketCapacity"
-                                        class="form-control" style="border: 2px solid rgba(0, 0, 0, 0.39); " />
-                                    <div class="text-danger" *ngIf="max_Tickets.touched">
-                                        <span *ngIf="max_Tickets?.errors?.['required']">This is required</span>
-                                        <span *ngIf="max_Tickets?.errors?.['pattern']">Please enter a valid number
-                                            greater than 0</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-5 d-flex align-items-center">
-                                <label for="total_tickets" style="width: 450px;">Total tickets available in the
-                                    pool:</label>
-                                <div class="col-6">
-                                    <input type="number" id="total_tickets" name="total_tickets" #total_Tickets="ngModel"
-                                        required pattern="^[1-9]\d*$" [disabled]="!max_Tickets.valid"
-                                        [(ngModel)]="totalTickets" class="form-control"
-                                        style="border: 2px solid rgba(0, 0, 0, 0.39);" />
-                                    <div class="text-danger" *ngIf="total_Tickets.touched">
-                                        <span *ngIf="total_Tickets?.errors?.['required']">This is required</span>
-                                        <span *ngIf="total_Tickets?.errors?.['pattern']">Please enter a valid
-                                            number greater than 0</span>
-                                        <span *ngIf="!isTotalTicketsValid()">
-                                            The value must be less than or equal to {{maxTicketCapacity}}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
+<div class="row pt-3 d-flex justify-content-center">
+    <div class="col-10">
+        <div class="card">
+            <div class="card-header bg-success text-center">
+                Configuration Form
+            </div>
+            <div class="card-body">
+                <form #form="ngForm">
+                    <div class="row g-3">
+                        <label for="name">Configuration Name: </label>
+                        <input type="text" id="name" #nameConf="ngModel" name="name" required
+                            [ngClass]="{'is-invalid': nameConf.invalid && nameConf.touched}"
+                             [(ngModel)]="configurationObj.name" class="form-control" minlength="4"
+                            style="border: 2px solid rgba(0, 0, 0, 0.39); " />
+                        <div class="text-danger m-0" *ngIf="nameConf.touched">
+                            <span *ngIf="nameConf?.errors?.['required']">This is required</span>
+                            <span *ngIf="nameConf?.errors?.['minlength']">Minimum length is 4 characters.</span>
                         </div>
-                        <div class="row pt-3 justify-content-center">
-                            <div class="col-5 d-flex align-items-center">
-                                <label for="tickets_per_release" style="width: 450px;">Number of tickets each vendor
-                                    will
-                                    release at a time: </label>
-                                <div class="col-6">
-                                    <input type="number" id="tickets_per_release" name="tickets_per_release"
-                                        #tickets_Per_Release="ngModel" required pattern="^[1-9]\d*$"
-                                        [(ngModel)]="ticketsPerRelease" [disabled]="!total_Tickets.valid"
-                                        class="form-control" style="border: 2px solid rgba(0, 0, 0, 0.39);" />
-                                    <div class="text-danger" *ngIf="tickets_Per_Release.touched">
-                                        <span *ngIf="tickets_Per_Release?.errors?.['required']">This is required</span>
-                                        <span *ngIf="tickets_Per_Release?.errors?.['pattern']">Please enter a valid
-                                            number greater than 0</span>
-                                        <span *ngIf="!isTicketPerReleaseValid()">
-                                            The value must be less than or equal to {{maxTicketCapacity - totalTickets}}
-                                        </span>
-                                    </div>
-                                </div>
 
-                            </div>
-                            <div class="col-5 d-flex align-items-center">
-                                <label for="release_interval" style="width: 450px;">Enter the release interval in
-                                    milliseconds: </label>
-                                <div class="col-6">
-                                    <input type="number" id="release_interval" name="release_interval"
-                                        #release_Interval="ngModel" required pattern="^[1-9]\d*$"
-                                        [disabled]="!tickets_Per_Release.valid"
-                                        [(ngModel)]="releaseIntervalMilliseconds" class="form-control"
-                                        style="border: 2px solid rgba(0, 0, 0, 0.39);" />
-                                    <div class="text-danger" *ngIf="release_Interval.touched">
-                                        <span *ngIf="release_Interval?.errors?.['required']">This is required</span>
-                                        <span *ngIf="release_Interval?.errors?.['pattern']">Please enter a valid
-                                            number greater than 0</span>
-                                    </div>
-                                </div>
+                        <label for="max_tickets">Max ticket capacity: </label>
+                        <input type="number" id="max_tickets" #max_Tickets="ngModel" name="max_tickets" required
+                            [ngClass]="{'is-invalid': max_Tickets.invalid && max_Tickets.touched}"
+                            pattern="^[1-9]\d*$" [(ngModel)]="configurationObj.maxTicketCapacity" class="form-control"
+                            style="border: 2px solid rgba(0, 0, 0, 0.39); " />
+                        <div class="text-danger m-0" *ngIf="max_Tickets.touched">
+                            <span *ngIf="max_Tickets?.errors?.['required']">This is required</span>
+                            <span *ngIf="max_Tickets?.errors?.['pattern']">Please enter a valid number
+                                greater than 0</span>
+                        </div>
 
-                            </div>
+
+                        <label for="total_tickets">Total tickets available in the pool:</label>
+                        <input type="number" id="total_tickets" name="total_tickets" #total_Tickets="ngModel" required
+                            [ngClass]="{'is-invalid': total_Tickets.invalid && total_Tickets.touched || (!isTotalTicketsValid && total_Tickets.touched)}"
+                            pattern="^[1-9]\d*$" [disabled]="!max_Tickets.valid" [(ngModel)]="configurationObj.totalTickets"
+                            class="form-control" style="border: 2px solid rgba(0, 0, 0, 0.39);" />
+                        <div class="text-danger m-0" *ngIf="total_Tickets.touched">
+                            <span *ngIf="total_Tickets?.errors?.['required']">This is required</span>
+                            <span *ngIf="total_Tickets?.errors?.['pattern']">Please enter a valid
+                                number greater than 0</span>
+                            <span *ngIf="!isTotalTicketsValid">
+                                The value must be less than or equal to {{configurationObj.maxTicketCapacity}}
+                            </span>
                         </div>
-                        <div class="row pt-3 justify-content-center">
-                            <div class="col-5 d-flex align-items-center">
-                                <label for="tickers_per_retrieval" style="width: 450px;">Number of tickets each customer
-                                    will
-                                    attempt to retrieve at a time: </label>
-                                <div class="col-6">
-                                    <input type="number" id="tickers_per_retrieval" name="tickers_per_retrieval"
-                                        #tickets_Per_Retrieval="ngModel" required [disabled]="!release_Interval.valid"
-                                        pattern="^[1-9]\d*$" [(ngModel)]="ticketsPerRetrieval" class="form-control"
-                                        style="border: 2px solid rgba(0, 0, 0, 0.39);" />
-                                    <div class="text-danger" *ngIf="tickets_Per_Retrieval.touched">
-                                        <span *ngIf="tickets_Per_Retrieval?.errors?.['required']">This is
-                                            required</span>
-                                        <span *ngIf="tickets_Per_Retrieval?.errors?.['pattern']">Please enter a valid
-                                            number greater than 0</span>
-                                        <span *ngIf="!isTicketsPerRetrievalValid()">
-                                            The value must be less than or equal to {{maxTicketCapacity}}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-5 d-flex align-items-center">
-                                <label for="retrieval_interval" style="width: 450px;">Enter the retrieval interval in
-                                    milliseconds: </label>
-                                <div class="col-6">
-                                    <input type="number" id="retrieval_interval" name="retrieval_interval"
-                                        #retrieval_Interval="ngModel" required [disabled]="!tickets_Per_Retrieval.valid"
-                                        pattern="^[1-9]\d*$" [(ngModel)]="retrievalIntervalMilliseconds"
-                                        class="form-control" style="border: 2px solid rgba(0, 0, 0, 0.39);" />
-                                    <div class="text-danger" *ngIf="retrieval_Interval.touched">
-                                        <span *ngIf="retrieval_Interval?.errors?.['required']">This is
-                                            required</span>
-                                        <span *ngIf="retrieval_Interval?.errors?.['pattern']">Please enter a valid
-                                            number greater than 0</span>
-                                    </div>
-                                </div>
-                            </div>
+
+                        <label for="tickets_per_release">Number of tickets each vendor will release at a time: </label>
+                        <input type="number" id="tickets_per_release" name="tickets_per_release"
+                            #tickets_Per_Release="ngModel" required pattern="^[1-9]\d*$" [(ngModel)]="configurationObj.ticketsPerRelease"
+                            [ngClass]="{'is-invalid': tickets_Per_Release.invalid && tickets_Per_Release.touched || (!isTicketPerReleaseValid &&  tickets_Per_Release.touched)}"
+                            [disabled]="!total_Tickets.valid" class="form-control"
+                            style="border: 2px solid rgba(0, 0, 0, 0.39);" />
+                        <div class="text-danger m-0" *ngIf="tickets_Per_Release.touched">
+                            <span *ngIf="tickets_Per_Release?.errors?.['required']">This is required</span>
+                            <span *ngIf="tickets_Per_Release?.errors?.['pattern']">Please enter a valid
+                                number greater than 0</span>
+                            <span *ngIf="!isTicketPerReleaseValid">
+                                The value must be less than or equal to {{configurationObj.maxTicketCapacity - configurationObj.totalTickets}}
+                            </span>
                         </div>
+
+                        <label for="release_interval">Enter the release interval in
+                            milliseconds: </label>
+
+                        <input type="number" id="release_interval" name="release_interval" #release_Interval="ngModel"
+                            [ngClass]="{'is-invalid': release_Interval.invalid && release_Interval.touched}"
+                            required pattern="^[1-9]\d*$" [disabled]="!tickets_Per_Release.valid"
+                            [(ngModel)]="configurationObj.releaseIntervalMilliseconds" class="form-control"
+                            style="border: 2px solid rgba(0, 0, 0, 0.39);" />
+                        <div class="text-danger m-0" *ngIf="release_Interval.touched">
+                            <span *ngIf="release_Interval?.errors?.['required']">This is required</span>
+                            <span *ngIf="release_Interval?.errors?.['pattern']">Please enter a valid
+                                number greater than 0</span>
+                        </div>
+
+                        <label for="tickers_per_retrieval">Number of tickets each customer will attempt to retrieve at a time: </label>
+                        <input type="number" id="tickers_per_retrieval" name="tickers_per_retrieval"
+                            [ngClass]="{'is-invalid': tickets_Per_Retrieval.invalid && tickets_Per_Retrieval.touched || (!isTicketsPerRetrievalValid && tickets_Per_Retrieval.touched)}"
+                            #tickets_Per_Retrieval="ngModel" required [disabled]="!release_Interval.valid"
+                            pattern="^[1-9]\d*$" [(ngModel)]="configurationObj.ticketsPerRetrieval" class="form-control"
+                            style="border: 2px solid rgba(0, 0, 0, 0.39);" />
+                        <div class="text-danger m-0" *ngIf="tickets_Per_Retrieval.touched">
+                            <span *ngIf="tickets_Per_Retrieval?.errors?.['required']">This is
+                                required</span>
+                            <span *ngIf="tickets_Per_Retrieval?.errors?.['pattern']">Please enter a valid
+                                number greater than 0</span>
+                            <span *ngIf="!isTicketsPerRetrievalValid">
+                                The value must be less than or equal to {{configurationObj.maxTicketCapacity}}
+                            </span>
+                        </div>
+
+                        <label for="retrieval_interval">Enter the retrieval interval in milliseconds: </label>
+                        <input type="number" id="retrieval_interval" name="retrieval_interval"
+                            #retrieval_Interval="ngModel" required [disabled]="!tickets_Per_Retrieval.valid"
+                            [ngClass]="{'is-invalid': retrieval_Interval.invalid && retrieval_Interval.touched}"
+                            pattern="^[1-9]\d*$" [(ngModel)]="configurationObj.retrievalIntervalMilliseconds" class="form-control"
+                            style="border: 2px solid rgba(0, 0, 0, 0.39);" />
+                        <div class="text-danger m-0" *ngIf="retrieval_Interval.touched">
+                            <span *ngIf="retrieval_Interval?.errors?.['required']">This is
+                                required</span>
+                            <span *ngIf="retrieval_Interval?.errors?.['pattern']">Please enter a valid
+                                number greater than 0</span>
+                        </div>
+
                         <div class="row pt-3 justify-content-center">
                             <div class="col-3 d-flex justify-content-end">
-                                <button class="btn btn-secondary" style="cursor: pointer;" (click)="form.reset()">Reset</button>
+                                <button class="btn btn-secondary" style="cursor: pointer;"
+                                    (click)="form.reset()">Reset</button>
                             </div>
                             <div class="col-3 d-flex justify-content-start">
-                                <button class="btn btn-success" style="cursor: pointer;" [disabled]="!form.valid || !isTotalTicketsValid() || !isTicketPerReleaseValid() || !isTicketsPerRetrievalValid()">Save</button>
+                                <button class="btn btn-success" style="cursor: pointer;"
+                                    [disabled]="!form.valid || !isTotalTicketsValid || !isTicketPerReleaseValid || !isTicketsPerRetrievalValid">Save</button>
                             </div>
                         </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-<!-- <div class="row mt-5 d-flex align-items-center justify-content-center">
-    <div class="col-3">
-        <div class="row d-flex align-items-center justify-content-center">
-            <div class="col-8">
-                <label for="max_tickets">Enter the <b>max</b> number of tickets available for the event: </label>
-            </div>
-            <div class="col-3">
-                <input type="text" id="max_tickets" name="max_tickets" [(ngModel)]="maxTicketCapacity" class="form-control"
-                    style="border: 2px solid rgba(0, 0, 0, 0.39);" />
-            </div>
-        </div>
-    </div>
-    <div class="col-3">
-        <div class="row d-flex align-items-center justify-content-center">
-            <div class="col-8">
-                <label for="max_tickets">Enter the total number of tickets available in the pool (value <= {{maxTicketCapacity}}): </label>
-            </div>
-            <div class="col-3">
-                <input type="text" id="max_tickets" name="max_tickets" [(ngModel)]="totalTickets" class="form-control"
-                    style="border: 2px solid rgba(0, 0, 0, 0.39);" />
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
-<div class="row mt-5 d-flex align-items-center justify-content-center">
-    <div class="col-3">
-        <div class="row d-flex align-items-center justify-content-center">
-            <div class="col-8">
-                <label for="max_tickets">Enter the number of tickets each vendor will release at a time (value <= {{maxTicketCapacity - totalTickets}}): </label>
+
+<div class="row pt-3 d-flex justify-content-center">
+    <div class="col-11">
+        <div class="card">
+            <div class="card-header bg-success text-center">
+                Saved Configurations
             </div>
-            <div class="col-3">
-                <input type="text" id="max_tickets" name="max_tickets" [value]="ticketsPerRelease" class="form-control"
-                    style="border: 2px solid rgba(0, 0, 0, 0.39);" />
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Config Name</th>
+                                    <th>Max Capacity</th>
+                                    <th>Total Tickets</th>
+                                    <th>Ticket Per Release</th>
+                                    <th>Release Interval</th>
+                                    <th>Tickets Per Retrieval</th>
+                                    <th>Retrieval Interval</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (item of configurationList(); track $index) {
+                                    <tr>
+                                        <td>{{item.name}}</td>
+                                        <td>{{item.maxTicketCapacity}}</td>
+                                        <td>{{item.totalTickets}}</td>
+                                        <td>{{item.ticketsPerRelease}}</td>
+                                        <td>{{item.releaseIntervalMilliseconds}}</td>
+                                        <td>{{item.ticketsPerRetrieval}}</td>
+                                        <td>{{item.retrievalIntervalMilliseconds}}</td>
+                                        <td><button class="btn btn-primary">Edit</button></td>
+                                        <td><button class="btn btn-danger">Delete</button></td>
+                                    </tr>
+                                }    
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-3">
-        <div class="row d-flex align-items-center justify-content-center">
-            <div class="col-8">
-                <label for="max_tickets">Enter the total number of tickets available in the pool (value <= {{maxTicketCapacity}}): </label>
-            </div>
-            <div class="col-3">
-                <input type="text" id="max_tickets" name="max_tickets" value="0" class="form-control"
-                    style="border: 2px solid rgba(0, 0, 0, 0.39);" />
-            </div>
-        </div>
-    </div>
-</div> -->
+</div>
+

@@ -6,6 +6,11 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 
 export const routes: Routes = [
 
+    { 
+        path: '',
+        redirectTo: 'configuration-form',
+        pathMatch:'full'
+    },
     {
         path: '',
         component: NavbarComponent,
