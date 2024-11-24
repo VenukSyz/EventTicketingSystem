@@ -1,42 +1,55 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class TicketPool {
-    private int availableTicketsInPool;
+    private final List<Integer> availableTicketsInPool;
+    private final List<Integer> ticketsAddedByVendors;
+    private final List<Integer> soldOutTickets;
     private final int maxCapacity;
-    private int ticketsAddedByVendors;
     private final int maxTicketsToAdd;
-    private int soldOutTickets;
     private int toBeSoldOutTickets;
+    private int totalTickets;
 
     public TicketPool() {
         super();
-        this.availableTicketsInPool = Configuration.getTotalTickets();
+        this.availableTicketsInPool = Collections.synchronizedList(new ArrayList<>());
+        this.ticketsAddedByVendors = Collections.synchronizedList(new ArrayList<>());
+        this.soldOutTickets = Collections.synchronizedList(new ArrayList<>());
         this.maxCapacity = Configuration.getMaxTicketCapacity();
-        this.ticketsAddedByVendors = 0;
-        this.maxTicketsToAdd = maxCapacity - availableTicketsInPool;
-        this.soldOutTickets = 0;
+        this.maxTicketsToAdd = maxCapacity - Configuration.getTotalTickets();
         this.toBeSoldOutTickets = Configuration.getMaxTicketCapacity();
+        this.totalTickets = Configuration.getTotalTickets();
+
+        for (int i = 0; i < totalTickets; i++) {
+            this.availableTicketsInPool.add(i + 1);
+        }
     }
 
     public synchronized boolean addTickets(int tickets, String name) {
-        if (ticketsAddedByVendors == maxTicketsToAdd) {
+        if (ticketsAddedByVendors.size() == maxTicketsToAdd) {
             System.out.println("Cannot add " + tickets + " tickets by " + name + ". Vendor addition limit reached.");
             return false;
         }
 
-        if (ticketsAddedByVendors + tickets > maxTicketsToAdd) {
+        if (ticketsAddedByVendors.size() + tickets > maxTicketsToAdd) {
             String msg = "Cannot add " + tickets + " tickets by " + name;
-            tickets = maxTicketsToAdd - ticketsAddedByVendors;
+            tickets = maxTicketsToAdd - ticketsAddedByVendors.size();
             System.out.println(msg + " but added " + tickets + " tickets.");
         }
 
-        availableTicketsInPool += tickets;
-        ticketsAddedByVendors += tickets;
-        System.out.println(name + " added " + tickets + " tickets. Total tickets now: " + availableTicketsInPool + " (Tickets added by vendors: " + ticketsAddedByVendors + ")");
+        for (int i = 0; i < tickets; i++) {
+            availableTicketsInPool.add(++totalTickets);
+            ticketsAddedByVendors.add(ticketsAddedByVendors.size() + 1);
+        }
+
+        System.out.println(name + " added " + tickets + " tickets. Total tickets now: " + availableTicketsInPool.size() + " (Tickets added by vendors: " + ticketsAddedByVendors.size() + ")");
         notifyAll();
         return true;
     }
 
     public synchronized boolean removeTickets(int tickets, String name) {
-        while(availableTicketsInPool < tickets) {
+        while(availableTicketsInPool.size() < tickets) {
             System.out.println("Not enough tickets available. "+ name + " is waiting...");
             try {
                 wait();
@@ -51,20 +64,23 @@ public class TicketPool {
             }
         }
 
-        availableTicketsInPool -= tickets;
+        for (int i = 0; i < tickets; i++) {
+            soldOutTickets.add(availableTicketsInPool.get(0));
+            availableTicketsInPool.remove(0);
+        }
+
         toBeSoldOutTickets -= tickets;
-        soldOutTickets += tickets;
-        System.out.println(name + " bought " + tickets + " tickets. Tickets left: " + availableTicketsInPool);
+        System.out.println(name + " bought " + tickets + " tickets. Tickets left: " + availableTicketsInPool.size());
         notifyAll();
         return true;
     }
 
     public int getAvailableTicketsInPool() {
-        return availableTicketsInPool;
+        return availableTicketsInPool.size();
     }
 
     public int getSoldOutTickets() {
-        return soldOutTickets;
+        return soldOutTickets.size();
     }
 
     public int getToBeSoldOutTickets() {
