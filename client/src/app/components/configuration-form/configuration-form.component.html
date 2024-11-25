@@ -16,6 +16,7 @@
                         <div class="text-danger m-0" *ngIf="nameConf.touched">
                             <span *ngIf="nameConf?.errors?.['required']">This is required</span>
                             <span *ngIf="nameConf?.errors?.['minlength']">Minimum length is 4 characters.</span>
+                            <span *ngIf="!isConfigurationNameAvailable">The name is already in saved configurations</span>
                         </div>
 
                         <label for="max_tickets">Max ticket capacity: </label>
@@ -105,11 +106,11 @@
                         <div class="row pt-3 justify-content-center">
                             <div class="col-3 d-flex justify-content-end">
                                 <button class="btn btn-secondary" style="cursor: pointer;"
-                                    (click)="form.reset()">Reset</button>
+                                    (click)="form.reset() ;onReset()">Reset</button>
                             </div>
                             <div class="col-3 d-flex justify-content-start">
                                 <button class="btn btn-success" style="cursor: pointer;"
-                                    [disabled]="!form.valid || !isTotalTicketsValid || !isTicketPerReleaseValid || !isTicketsPerRetrievalValid">Save</button>
+                                    [disabled]="!form.valid || !isConfigurationNameAvailable || !isTotalTicketsValid || !isTicketPerReleaseValid || !isTicketsPerRetrievalValid" (click)="onSaveUpdate()">{{configurationObj.id === 0 ? 'Save' : 'Update'}}</button>
                             </div>
                         </div>
                     </div>
@@ -128,22 +129,32 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Config Name</th>
-                                    <th>Max Capacity</th>
-                                    <th>Total Tickets</th>
-                                    <th>Ticket Per Release</th>
-                                    <th>Release Interval</th>
-                                    <th>Tickets Per Retrieval</th>
-                                    <th>Retrieval Interval</th>
-                                    <th>Edit</th>
-                                    <th>Delete</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @for (item of configurationList(); track $index) {
+                        @if (isLoader) {
+                            <div class="col-12 text-center">
+                                <div class="spinner-border text-primary"></div>
+                            </div>
+                        } @else {
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Config Name</th>
+                                        <th>Max Capacity</th>
+                                        <th>Total Tickets</th>
+                                        <th>Ticket Per Release</th>
+                                        <th>Release Interval</th>
+                                        <th>Tickets Per Retrieval</th>
+                                        <th>Retrieval Interval</th>
+                                        <th>Edit</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                @if (configurationList().length === 0) {
+                                    <tr>
+                                        <td colspan="9" class="text-center"><b>No saved configurations</b></td>
+                                    </tr>
+                                } @else {
+                                    @for (item of configurationList(); track $index) {
                                     <tr>
                                         <td>{{item.name}}</td>
                                         <td>{{item.maxTicketCapacity}}</td>
@@ -152,12 +163,14 @@
                                         <td>{{item.releaseIntervalMilliseconds}}</td>
                                         <td>{{item.ticketsPerRetrieval}}</td>
                                         <td>{{item.retrievalIntervalMilliseconds}}</td>
-                                        <td><button class="btn btn-primary">Edit</button></td>
-                                        <td><button class="btn btn-danger">Delete</button></td>
+                                        <td><button class="btn btn-primary" (click)="onEdit(item)">Edit</button></td>
+                                        <td><button class="btn btn-danger" (click)="onDelete(item.id)">Delete</button></td>
                                     </tr>
-                                }    
-                            </tbody>
-                        </table>
+                                    }
+                                }
+                                </tbody>
+                            </table>
+                        }
                     </div>
                 </div>
             </div>

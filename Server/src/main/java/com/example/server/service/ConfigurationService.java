@@ -24,4 +24,14 @@ public class ConfigurationService {
         List<Configuration> configurations = configurationRepo.findAll();
         return modelMapper.map(configurations, new TypeToken<List<ConfigurationDTO>>(){}.getType());
     }
+
+    public ConfigurationDTO saveUpdateConfiguration(ConfigurationDTO configurationDTO) {
+        configurationRepo.save(modelMapper.map(configurationDTO, Configuration.class));
+        return configurationDTO;
+    }
+
+    public boolean deleteConfiguration(Long id) {
+        configurationRepo.deleteById(id);
+        return true;
+    }
 }

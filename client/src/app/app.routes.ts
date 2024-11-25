@@ -17,15 +17,18 @@ export const routes: Routes = [
         children: [
             {
                 path: 'configuration-form',
-                component: ConfigurationFormComponent
+                component: ConfigurationFormComponent,
+                data: { title: 'Event Ticketing System | Configuration Form'}
             },
             {
                 path: 'control-panel',
-                component: ControlPanelComponent
+                component: ControlPanelComponent,
+                data: { title: 'Event Ticketing System | Control Panel'}
             },
             {
                 path: 'ticket-status',
-                component: TicketStatusComponent
+                component: TicketStatusComponent,
+                data: { title: 'Event Ticketing System | Ticket Status'}
             }
         ]
     }

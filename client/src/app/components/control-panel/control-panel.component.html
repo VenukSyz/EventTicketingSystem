@@ -1,1 +1,53 @@
-<p>control-panel works!</p>
+<div class="row pt-3 d-flex justify-content-center">
+    <div class="col-10">
+        <div class="card">
+            <div class="card-header bg-success text-center">
+                Configurations
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        @if (isLoader) {
+                            <div class="col-12 text-center">
+                                <div class="spinner-border text-primary"></div>
+                            </div>
+                        } @else {
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Config Name</th>
+                                        <th>Max Capacity</th>
+                                        <th>Total Tickets</th>
+                                        <th>Ticket Per Release</th>
+                                        <th>Release Interval</th>
+                                        <th>Tickets Per Retrieval</th>
+                                        <th>Retrieval Interval</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                @if (configurationList().length === 0) {
+                                    <tr>
+                                        <td colspan="7" class="text-center"><b>No saved configurations</b></td>
+                                    </tr>
+                                } @else {
+                                    @for (item of configurationList(); track $index) {
+                                    <tr>
+                                        <td>{{item.name}}</td>
+                                        <td>{{item.maxTicketCapacity}}</td>
+                                        <td>{{item.totalTickets}}</td>
+                                        <td>{{item.ticketsPerRelease}}</td>
+                                        <td>{{item.releaseIntervalMilliseconds}}</td>
+                                        <td>{{item.ticketsPerRetrieval}}</td>
+                                        <td>{{item.retrievalIntervalMilliseconds}}</td>
+                                    </tr>
+                                    }
+                                }
+                                </tbody>
+                            </table>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

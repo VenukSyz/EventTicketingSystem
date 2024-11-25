@@ -4,11 +4,9 @@ import com.example.server.dto.ApiResponse;
 import com.example.server.dto.ConfigurationDTO;
 import com.example.server.service.ConfigurationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,5 +20,15 @@ public class ConfigurationController {
     @GetMapping("/getAllConfigurations")
     public ResponseEntity<ApiResponse<List<ConfigurationDTO>>> getAllConfigurations() {
         return ResponseEntity.ok( new ApiResponse<>(configurationService.getAllConfigurations()));
+    }
+
+    @PostMapping("/saveUpdateConfiguration")
+    public ResponseEntity<ApiResponse<ConfigurationDTO>> saveUpdateConfiguration(@RequestBody ConfigurationDTO configurationDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(configurationService.saveUpdateConfiguration(configurationDTO)));
+    }
+
+    @DeleteMapping("/deleteConfiguration/{id}")
+    public boolean deleteConfiguration(@PathVariable Long id){
+        return configurationService.deleteConfiguration(id);
     }
 }
