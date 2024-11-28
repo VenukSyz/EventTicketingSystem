@@ -24,11 +24,6 @@ export const routes: Routes = [
                 path: 'control-panel',
                 component: ControlPanelComponent,
                 data: { title: 'Event Ticketing System | Control Panel'}
-            },
-            {
-                path: 'ticket-status',
-                component: TicketStatusComponent,
-                data: { title: 'Event Ticketing System | Ticket Status'}
             }
         ]
     }

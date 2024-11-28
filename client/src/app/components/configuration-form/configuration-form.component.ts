@@ -27,7 +27,7 @@ export class ConfigurationFormComponent implements OnInit {
     this.loadConfigurations();
   }
 
-  loadConfigurations() {
+  loadConfigurations(): void {
     this.configurationService.getAllConfigurations().subscribe((result: IApiResponseModel) => {
       this.configurationList.set(result.data);
       this.isLoader = false;
@@ -66,11 +66,11 @@ export class ConfigurationFormComponent implements OnInit {
   }
 
 
-  onReset() {
+  onReset(): void {
     this.configurationObj = new Configuration();
   }
 
-  onSaveUpdate() {
+  onSaveUpdate(): void {
     this.configurationService.saveUpdateConfiguration(this.configurationObj).subscribe((result: IApiResponseModel) => {
       if(this.configurationObj.id === 0) {
         alert("Configuration saved successfully!");
@@ -82,11 +82,11 @@ export class ConfigurationFormComponent implements OnInit {
     })
   }
 
-  onEdit(obj: Configuration) {
+  onEdit(obj: Configuration): void {
     this.configurationObj = { ...obj };
   }
 
-  onDelete(id: number) {
+  onDelete(id: number): void {
     this.configurationService.deleteConfiguration(id).subscribe((result: IApiResponseModel)=> {
       alert("Configuration deleted successfully!");
       this.loadConfigurations();

@@ -1,1 +1,11 @@
-<p>ticket-status works!</p>
+<div class="status-container">
+    <h3 style="border-bottom: 2px solid black; padding-bottom: 5px;">System Status</h3>
+    <div *ngIf="ticketStatus; else loading">
+      <p><strong>Tickets in Pool:</strong> {{ ticketStatus.ticketsInPool }}</p>
+      <p><strong>Sold Out Tickets:</strong> {{ ticketStatus.soldOutTickets }}</p>
+      <p><strong>Total Tickets to be Sold Out:</strong> {{ ticketStatus.toBeSoldOutTickets }}</p>
+    </div>
+    <ng-template #loading>
+      <p>System has not started yet!</p>
+    </ng-template>
+  </div>

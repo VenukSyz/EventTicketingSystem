@@ -1,0 +1,12 @@
+.navbar {
+  position: fixed; /* Ensure it stays at the top */
+  width: 100%; /* Full width */
+  z-index: 10;
+  background-color: #000000;
+  transition: background-color 0.3s ease; /* Ensure it stays above other content */
+}
+
+.navbar.scrolled {
+  background-color: rgba(0, 0, 0, 0.452);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}

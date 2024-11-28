@@ -3,8 +3,8 @@ public class Customer extends User{
     private final int ticketsPerRetrieval;
     private final int retrievalIntervalMilliseconds;
 
-    public Customer(TicketPool ticketpool, String name, String email, String phoneNum) {
-        super(++customerCounter, ticketpool, name, email, phoneNum);
+    public Customer(TicketPool ticketPool, String name, String email, String phoneNum) {
+        super(++customerCounter, ticketPool, name, email, phoneNum);
         this.ticketsPerRetrieval = Configuration.getTicketsPerRetrieval();
         this.retrievalIntervalMilliseconds = Configuration.getRetrievalIntervalMilliseconds();
     }

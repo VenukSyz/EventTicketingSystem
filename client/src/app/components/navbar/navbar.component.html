@@ -1,6 +1,5 @@
-<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+<nav class="navbar navbar-expand-sm navbar-dark" [ngClass]="{'scrolled': isScrolled}">
     <div class="container-fluid">
-      
       <div class="collapse navbar-collapse" id="mynavbar">
         <ul class="navbar-nav me-auto">
           <li class="nav-item" >
@@ -9,13 +8,7 @@
           <li class="nav-item" >
             <a class="nav-link" routerLink="/control-panel" routerLinkActive="active">Control Panel</a>
           </li>
-          <li class="nav-item" >
-            <a class="nav-link" routerLink="/ticket-status" routerLinkActive="active">Ticket Status</a>
-          </li>
         </ul>
-        <form class="d-flex">
-          <button class="btn btn-primary" type="button">Logout</button>
-        </form>
       </div>
     </div>
 </nav>

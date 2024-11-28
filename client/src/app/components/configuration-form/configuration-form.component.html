@@ -1,18 +1,17 @@
-<h1 class="text-center">Save & Edit Configurations</h1>
-<div class="row pt-3 d-flex justify-content-center">
+<h1 class="text-center" style="color:white; margin-top: 80px;">Save & Edit Configurations</h1>
+<div class="row pt-3 d-flex justify-content-center" >
     <div class="col-10">
-        <div class="card">
-            <div class="card-header bg-success text-center">
+        <div class="card" >
+            <div class="card-header text-center">
                 Configuration Form
             </div>
             <div class="card-body">
                 <form #form="ngForm">
-                    <div class="row g-3">
+                    <div class="row g-3 p-3">
                         <label for="name">Configuration Name: </label>
                         <input type="text" id="name" #nameConf="ngModel" name="name" required
                             [ngClass]="{'is-invalid': nameConf.invalid && nameConf.touched}"
-                             [(ngModel)]="configurationObj.name" class="form-control" minlength="4"
-                            style="border: 2px solid rgba(0, 0, 0, 0.39); " />
+                             [(ngModel)]="configurationObj.name" class="form-control" minlength="4"/>
                         <div class="text-danger m-0" *ngIf="nameConf.touched">
                             <span *ngIf="nameConf?.errors?.['required']">This is required</span>
                             <span *ngIf="nameConf?.errors?.['minlength']">Minimum length is 4 characters.</span>
@@ -22,8 +21,7 @@
                         <label for="max_tickets">Max ticket capacity: </label>
                         <input type="number" id="max_tickets" #max_Tickets="ngModel" name="max_tickets" required
                             [ngClass]="{'is-invalid': max_Tickets.invalid && max_Tickets.touched}"
-                            pattern="^[1-9]\d*$" [(ngModel)]="configurationObj.maxTicketCapacity" class="form-control"
-                            style="border: 2px solid rgba(0, 0, 0, 0.39); " />
+                            pattern="^[1-9]\d*$" [(ngModel)]="configurationObj.maxTicketCapacity" class="form-control"/>
                         <div class="text-danger m-0" *ngIf="max_Tickets.touched">
                             <span *ngIf="max_Tickets?.errors?.['required']">This is required</span>
                             <span *ngIf="max_Tickets?.errors?.['pattern']">Please enter a valid number
@@ -34,8 +32,7 @@
                         <label for="total_tickets">Total tickets available in the pool:</label>
                         <input type="number" id="total_tickets" name="total_tickets" #total_Tickets="ngModel" required
                             [ngClass]="{'is-invalid': total_Tickets.invalid && total_Tickets.touched || (!isTotalTicketsValid && total_Tickets.touched)}"
-                            pattern="^[1-9]\d*$" [disabled]="!max_Tickets.valid" [(ngModel)]="configurationObj.totalTickets"
-                            class="form-control" style="border: 2px solid rgba(0, 0, 0, 0.39);" />
+                            pattern="^[1-9]\d*$" [disabled]="!max_Tickets.valid" [(ngModel)]="configurationObj.totalTickets" class="form-control"/>
                         <div class="text-danger m-0" *ngIf="total_Tickets.touched">
                             <span *ngIf="total_Tickets?.errors?.['required']">This is required</span>
                             <span *ngIf="total_Tickets?.errors?.['pattern']">Please enter a valid
@@ -49,8 +46,7 @@
                         <input type="number" id="tickets_per_release" name="tickets_per_release"
                             #tickets_Per_Release="ngModel" required pattern="^[1-9]\d*$" [(ngModel)]="configurationObj.ticketsPerRelease"
                             [ngClass]="{'is-invalid': tickets_Per_Release.invalid && tickets_Per_Release.touched || (!isTicketPerReleaseValid &&  tickets_Per_Release.touched)}"
-                            [disabled]="!total_Tickets.valid" class="form-control"
-                            style="border: 2px solid rgba(0, 0, 0, 0.39);" />
+                            [disabled]="!total_Tickets.valid" class="form-control"/>
                         <div class="text-danger m-0" *ngIf="tickets_Per_Release.touched">
                             <span *ngIf="tickets_Per_Release?.errors?.['required']">This is required</span>
                             <span *ngIf="tickets_Per_Release?.errors?.['pattern']">Please enter a valid
@@ -66,8 +62,7 @@
                         <input type="number" id="release_interval" name="release_interval" #release_Interval="ngModel"
                             [ngClass]="{'is-invalid': release_Interval.invalid && release_Interval.touched}"
                             required pattern="^[1-9]\d*$" [disabled]="!tickets_Per_Release.valid"
-                            [(ngModel)]="configurationObj.releaseIntervalMilliseconds" class="form-control"
-                            style="border: 2px solid rgba(0, 0, 0, 0.39);" />
+                            [(ngModel)]="configurationObj.releaseIntervalMilliseconds" class="form-control"/>
                         <div class="text-danger m-0" *ngIf="release_Interval.touched">
                             <span *ngIf="release_Interval?.errors?.['required']">This is required</span>
                             <span *ngIf="release_Interval?.errors?.['pattern']">Please enter a valid
@@ -78,8 +73,7 @@
                         <input type="number" id="tickers_per_retrieval" name="tickers_per_retrieval"
                             [ngClass]="{'is-invalid': tickets_Per_Retrieval.invalid && tickets_Per_Retrieval.touched || (!isTicketsPerRetrievalValid && tickets_Per_Retrieval.touched)}"
                             #tickets_Per_Retrieval="ngModel" required [disabled]="!release_Interval.valid"
-                            pattern="^[1-9]\d*$" [(ngModel)]="configurationObj.ticketsPerRetrieval" class="form-control"
-                            style="border: 2px solid rgba(0, 0, 0, 0.39);" />
+                            pattern="^[1-9]\d*$" [(ngModel)]="configurationObj.ticketsPerRetrieval" class="form-control"/>
                         <div class="text-danger m-0" *ngIf="tickets_Per_Retrieval.touched">
                             <span *ngIf="tickets_Per_Retrieval?.errors?.['required']">This is
                                 required</span>
@@ -93,9 +87,8 @@
                         <label for="retrieval_interval">Enter the retrieval interval in milliseconds: </label>
                         <input type="number" id="retrieval_interval" name="retrieval_interval"
                             #retrieval_Interval="ngModel" required [disabled]="!tickets_Per_Retrieval.valid"
-                            [ngClass]="{'is-invalid': retrieval_Interval.invalid && retrieval_Interval.touched}"
-                            pattern="^[1-9]\d*$" [(ngModel)]="configurationObj.retrievalIntervalMilliseconds" class="form-control"
-                            style="border: 2px solid rgba(0, 0, 0, 0.39);" />
+                            [ngClass]="{'is-invalid': retrieval_Interval.invalid && retrieval_Interval.touched }"
+                            pattern="^[1-9]\d*$" [(ngModel)]="configurationObj.retrievalIntervalMilliseconds" class="form-control"/>
                         <div class="text-danger m-0" *ngIf="retrieval_Interval.touched">
                             <span *ngIf="retrieval_Interval?.errors?.['required']">This is
                                 required</span>
@@ -121,20 +114,20 @@
 </div>
 
 <div class="row pt-3 d-flex justify-content-center">
-    <div class="col-11">
+    <div class="col-11"  style="margin-bottom: 20px;">
         <div class="card">
-            <div class="card-header bg-success text-center">
+            <div class="card-header text-center">
                 Saved Configurations
             </div>
             <div class="card-body">
-                <div class="row">
+                <div class="row" >
                     <div class="col-12">
                         @if (isLoader) {
                             <div class="col-12 text-center">
                                 <div class="spinner-border text-primary"></div>
                             </div>
                         } @else {
-                            <table class="table table-bordered">
+                            <table class="table table-bordered custom-table">
                                 <thead>
                                     <tr>
                                         <th>Config Name</th>

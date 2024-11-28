@@ -1,0 +1,29 @@
+.control-panel-container {
+    max-width: 800px;
+    margin: 1%;
+    padding: 10px;
+
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.356);
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.356);
+  backdrop-filter: blur(10px);
+  border: none;
+}
+
+.card-header {
+  background-color: #5F1E9F;
+  color: white;
+}
+
+input[type="number"], select {
+  background: rgba(255, 255, 255, 0.651);
+}
+
+.custom-table {
+  --bs-table-bg: rgba(255, 255, 255, 0.404); /* Light blue background */
+  color: #000000; /* Dark text color */
+  border-radius: 10px;
+}

@@ -1,0 +1,11 @@
+<div class="log-container">
+    <h1 style="border-bottom: 2px solid black;">Live Logs</h1>
+    <div id="logContainer" #logContainer class="logs" *ngIf="logs && logs.length > 0; else loading">
+        <div class="log" *ngFor="let log of logs">
+            {{ log }}
+          </div>
+    </div>
+    <ng-template #loading>
+        <p>The system has not started yet.</p>
+    </ng-template>
+</div>

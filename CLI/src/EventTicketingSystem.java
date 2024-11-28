@@ -4,48 +4,48 @@ import java.util.List;
 import java.util.Scanner;
 
 public class EventTicketingSystem {
-    private final TicketPool ticketPool;
+    private TicketPool ticketPool;
     private final List<Thread> vendorThreads = Collections.synchronizedList(new ArrayList<>());
     private final List<Thread> customerThreads = Collections.synchronizedList(new ArrayList<>());
     private boolean running = false;  // System status flag
-    int numVendors;
-    int numCustomers;
+    private int numVendors;
+    private int numCustomers;
 
     public EventTicketingSystem() {
         // Load or initialize configuration
         System.out.println("=== Real-Time Event Ticketing System ===");
+        // Initialize TicketPool with configuration values
+        initializeSystem();
+    }
+
+    private void initializeSystem() {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Load configuration from file? (yes/no): ");
+        System.out.print("Load configuration from file or Enter 'No' to initialize a config manually? (yes/no): ");
         String loadFromFile = scanner.nextLine().trim().toLowerCase();
 
         if (loadFromFile.equals("yes")) {
             Configuration.loadFromFile();
         } else {
             Configuration.initialize();
-            // Prompt to save configuration to a file
-            while (true){
+            while (true) {
                 System.out.print("Would you like to save the current configuration to a file? (yes/no): ");
                 String saveToFile = scanner.nextLine().trim().toLowerCase();
-                if (saveToFile.equalsIgnoreCase("yes")) {
+                if (saveToFile.equals("yes")) {
                     Configuration.saveToFile();
                     break;
-                } else if (saveToFile.equalsIgnoreCase("no")) {
+                } else if (saveToFile.equals("no")) {
                     break;
                 } else {
                     System.out.println("Invalid input! Try again.\n");
                 }
-
             }
         }
 
-        // Initialize TicketPool with configuration values
         ticketPool = new TicketPool();
 
-        // Ask for the number of vendors and customers
         numVendors = getPositiveIntegerInput("Enter the number of vendors: ");
         numCustomers = getPositiveIntegerInput("Enter the number of customers: ");
 
-        // Create vendors and customers based on input
         createVendors(numVendors);
         createCustomers(numCustomers);
     }
@@ -135,6 +135,16 @@ public class EventTicketingSystem {
         }
     }
 
+    public void reset() {
+        if (running) {
+            System.out.println("System must be stopped before resetting.");
+            return;
+        }
+
+        System.out.println("Resetting the system...");
+        initializeSystem();
+    }
+
     public void checkStatus() {
         System.out.println("=== System Status ===");
         System.out.println("Running: " + running);
@@ -150,7 +160,7 @@ public class EventTicketingSystem {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            System.out.println("\nEnter a command (start, stop, status, exit): ");
+            System.out.println("\nEnter a command (start, stop, status, reset, exit): ");
             String command = scanner.nextLine().trim().toLowerCase();
 
             switch (command) {
@@ -160,6 +170,9 @@ public class EventTicketingSystem {
                 case "stop":
                     system.stop();
                     break;
+                case "reset":
+                    system.reset();
+                    break;
                 case "status":
                     system.checkStatus();
                     break;
@@ -168,7 +181,7 @@ public class EventTicketingSystem {
                     System.out.println("Exiting the system.");
                     return;
                 default:
-                    System.out.println("Unknown command. Please enter 'start', 'stop', 'status', or 'exit'.");
+                    System.out.println("Unknown command. Please enter 'start', 'stop', 'status', 'reset', or 'exit'.");
             }
         }
     }

@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
-import { ConfigurationFormComponent } from './components/configuration-form/configuration-form.component';
 import { Title } from '@angular/platform-browser';
 import { filter, map } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, ConfigurationFormComponent],
+  imports: [RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -32,6 +31,4 @@ export class AppComponent implements OnInit {
       }
     });
   }
-
-  // title = 'client';
 }

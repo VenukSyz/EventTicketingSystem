@@ -1,1 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
+html, body, app-root {
+    height: 100%; /* Ensure full height */
+    margin: 0;    /* Remove default margins */
+    padding: 0;   /* Remove default padding */
+  }
+  
+  body {
+    background-image: url('/background.jpg'); /* Path to your image */
+    background-size: cover;                  /* Cover the entire viewport */
+    background-position: center;             /* Center the image */
+    background-repeat: no-repeat;            /* Prevent tiling */
+    background-attachment: fixed;  
+  }
