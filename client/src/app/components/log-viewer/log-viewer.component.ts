@@ -9,16 +9,21 @@ import { CommonModule } from '@angular/common';
   templateUrl: './log-viewer.component.html',
   styleUrl: './log-viewer.component.css'
 })
-export class LogViewerComponent implements OnInit,OnDestroy,AfterViewChecked {
+export class LogViewerComponent implements OnInit, OnDestroy, AfterViewChecked {
   logs: string[] = [];
   @ViewChild('logContainer') logContainer!: ElementRef;
 
-  constructor(private webSocketService: WebSocketService) {}
+  constructor(private webSocketService: WebSocketService) { }
 
   ngOnInit(): void {
-      this.webSocketService.connect((message: string) => {
-        this.logs.push(message);
-      });
+    const savedLogs = sessionStorage.getItem('logs');
+    if (savedLogs) {
+      this.logs = JSON.parse(savedLogs);
+    }
+    this.webSocketService.connect((message: string) => {
+      this.logs.push(message);
+      sessionStorage.setItem('logs', JSON.stringify(this.logs));
+    });
   }
 
   ngAfterViewChecked(): void {
@@ -35,9 +40,10 @@ export class LogViewerComponent implements OnInit,OnDestroy,AfterViewChecked {
 
   resetTheLogger(): void {
     this.logs = [];
+    sessionStorage.removeItem('logs'); // Clear logs from sessionStorage
   }
 
   ngOnDestroy(): void {
-      this.webSocketService.disconnect();
+    this.webSocketService.disconnect();
   }
 }

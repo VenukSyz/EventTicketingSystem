@@ -15,13 +15,22 @@ export class TicketStatusComponent implements OnInit{
   constructor(private ticketStatusService: TicketStatusService) {}
 
   ngOnInit(): void {
-    // Subscribe to systemStatus updates
+    const btnFlag = sessionStorage.getItem('btnFlag');
+
     this.ticketStatusService.ticketStatus$.subscribe((status) => {
       this.ticketStatus = status;
     });
+
+    if (btnFlag !== null) {
+      const flag: number = parseInt(btnFlag, 10);
+      if (flag === 0) {
+        this.resetTicketStatus();
+      }
+    }
   }
 
   resetTicketStatus(): void {
     this.ticketStatus = null;
+    sessionStorage.removeItem('status');
   }
 }

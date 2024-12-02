@@ -30,7 +30,11 @@ export class ControlPanelComponent implements OnInit{
   constructor(private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
-      this.loadConfigurations();
+    const savedBtnFlag = sessionStorage.getItem('btnFlag');
+    if (savedBtnFlag !== null) {
+      this.btnFlag = parseInt(savedBtnFlag, 10);
+    }
+    this.loadConfigurations();
   }
 
   loadConfigurations(): void {
@@ -51,6 +55,7 @@ export class ControlPanelComponent implements OnInit{
       })
     }
     this.btnFlag = 1;
+    sessionStorage.setItem('btnFlag',this.btnFlag.toString());
   }
 
   onStop(): void {
@@ -58,6 +63,7 @@ export class ControlPanelComponent implements OnInit{
     this.controlPanelService.stopSystem().subscribe((result: IApiResponseModel) => {
       this.showSnackbar(result.data);
     });
+    sessionStorage.setItem('btnFlag',this.btnFlag.toString());
   }
 
   onReset(): void {
@@ -65,6 +71,7 @@ export class ControlPanelComponent implements OnInit{
     this.logViewer.resetTheLogger();
     this.ticketStatus.resetTicketStatus();
     this.showSnackbar("The system reset");
+    sessionStorage.setItem('btnFlag',this.btnFlag.toString());
   }
 
   get isConfigurationSelected() : boolean {
@@ -78,5 +85,4 @@ export class ControlPanelComponent implements OnInit{
       verticalPosition: 'top',
     });
   }
-
 }

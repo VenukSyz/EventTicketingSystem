@@ -3,6 +3,7 @@ html, body, app-root {
     height: 100%; /* Ensure full height */
     margin: 0;    /* Remove default margins */
     padding: 0;   /* Remove default padding */
+    font-family: 'Poppins', sans-serif;
   }
   
   body {
