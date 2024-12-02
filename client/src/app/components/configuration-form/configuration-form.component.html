@@ -103,7 +103,7 @@
                             </div>
                             <div class="col-3 d-flex justify-content-start">
                                 <button class="btn btn-success" style="cursor: pointer;"
-                                    [disabled]="!form.valid || !isConfigurationNameAvailable || !isTotalTicketsValid || !isTicketPerReleaseValid || !isTicketsPerRetrievalValid" (click)="onSaveUpdate()">{{configurationObj.id === 0 ? 'Save' : 'Update'}}</button>
+                                    [disabled]="!form.valid || !isConfigurationNameAvailable || !isTotalTicketsValid || !isTicketPerReleaseValid || !isTicketsPerRetrievalValid" (click)="onSaveUpdate(); form.reset()">{{configurationObj.id === 0 ? 'Save' : 'Update'}}</button>
                             </div>
                         </div>
                     </div>

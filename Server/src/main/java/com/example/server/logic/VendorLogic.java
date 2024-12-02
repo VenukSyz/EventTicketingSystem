@@ -7,12 +7,9 @@ public class VendorLogic extends UserLogic{
     private static long vendorCounter;
     private final int ticketsPerRelease;
     private final int releaseIntervalMilliseconds;
-    private final LogBroadcaster logBroadcaster;
 
-
-    public VendorLogic(LogBroadcaster logBroadcaster,TicketPoolLogic ticketPool, ConfigurationDTO configuration, String name, String email, String phoneNum) {
-        super(++vendorCounter, ticketPool, name, email, phoneNum);
-        this.logBroadcaster = logBroadcaster;
+    public VendorLogic(LogBroadcaster logBroadcaster, TicketPoolLogic ticketPool, ConfigurationDTO configuration, String name, String email, String phoneNum) {
+        super(++vendorCounter, logBroadcaster, ticketPool, name, email, phoneNum);
         ticketsPerRelease = configuration.getTicketsPerRelease();
         releaseIntervalMilliseconds = configuration.getReleaseIntervalMilliseconds();
     }
@@ -23,8 +20,8 @@ public class VendorLogic extends UserLogic{
             while (true) {
                 boolean ticketsAdded = this.getTicketPool().addTickets(ticketsPerRelease, this.getName());
                 if (!ticketsAdded) {
-                    synchronized (logBroadcaster) {
-                        logBroadcaster.log(this.getName() + " is stopping as all tickets have been added.");
+                    synchronized (this.getLogBroadcaster()) {
+                        this.getLogBroadcaster().log(this.getName() + " is stopping as all tickets have been added.");
                     }
                     break;
                 }
@@ -33,8 +30,8 @@ public class VendorLogic extends UserLogic{
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            synchronized (logBroadcaster) {
-                logBroadcaster.log(this.getName() + " interrupted");
+            synchronized (this.getLogBroadcaster()) {
+                this.getLogBroadcaster().log(this.getName() + " interrupted");
             }
         }
     }

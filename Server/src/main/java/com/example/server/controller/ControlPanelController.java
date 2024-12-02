@@ -4,9 +4,7 @@ import com.example.server.dto.ApiResponse;
 import com.example.server.dto.ConfigurationDTO;
 import com.example.server.dto.ControlPanelDTO;
 import com.example.server.logic.EventTicketingLogic;
-import com.example.server.service.ConfigurationService;
-import com.example.server.service.LogBroadcaster;
-import com.example.server.service.TicketStatusService;
+import com.example.server.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +22,7 @@ public class ControlPanelController {
     private final TicketStatusService ticketStatusService;
 
     private EventTicketingLogic system;
+
 
     public ControlPanelController(TicketStatusService ticketStatusService) {
         this.ticketStatusService = ticketStatusService;

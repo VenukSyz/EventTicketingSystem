@@ -7,11 +7,9 @@ public class CustomerLogic extends UserLogic{
     private static long customerCounter = 0;
     private final int ticketsPerRetrieval;
     private final int retrievalIntervalMilliseconds;
-    private final LogBroadcaster logBroadcaster;
 
     public CustomerLogic(LogBroadcaster logBroadcaster, TicketPoolLogic ticketPool, ConfigurationDTO configuration, String name, String email, String phoneNum) {
-        super(++customerCounter, ticketPool, name, email, phoneNum);
-        this.logBroadcaster = logBroadcaster;
+        super(++customerCounter, logBroadcaster,ticketPool, name, email, phoneNum);
         this.ticketsPerRetrieval = configuration.getTicketsPerRetrieval();
         this.retrievalIntervalMilliseconds = configuration.getRetrievalIntervalMilliseconds();
     }
@@ -22,8 +20,8 @@ public class CustomerLogic extends UserLogic{
             while (true) {
                 synchronized (this.getTicketPool()) {
                     if (this.getTicketPool().getToBeSoldOutTickets() < this.ticketsPerRetrieval) {
-                        synchronized (logBroadcaster) {
-                            logBroadcaster.log(this.getName() + " stopping: Not enough tickets left to retrieve.");
+                        synchronized (this.getLogBroadcaster()) {
+                            this.getLogBroadcaster().log(this.getName() + " stopping: Not enough tickets left to retrieve.");
                         }
                         break;
                     }
@@ -31,8 +29,8 @@ public class CustomerLogic extends UserLogic{
                 boolean success = this.getTicketPool().removeTickets(ticketsPerRetrieval, this.getName());
 
                 if (!success) {
-                    synchronized (logBroadcaster) {
-                        logBroadcaster.log(this.getName() + " could not retrieve tickets");
+                    synchronized (this.getLogBroadcaster()) {
+                        this.getLogBroadcaster().log(this.getName() + " could not retrieve tickets");
                     }
                 }
 
@@ -40,8 +38,8 @@ public class CustomerLogic extends UserLogic{
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            synchronized (logBroadcaster) {
-                logBroadcaster.log(this.getName() + " interrupted.");
+            synchronized (this.getLogBroadcaster()) {
+                this.getLogBroadcaster().log(this.getName() + " interrupted.");
             }
         }
     }

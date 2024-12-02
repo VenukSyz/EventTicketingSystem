@@ -63,9 +63,8 @@
                         <h6>Select Configuration</h6>
                     </label>
 
-                    <select id="options" name="options" class="form-select m-1"
-                         [(ngModel)]="controlPanelObj.id" required
-                        #selectConfig="ngModel" [disabled]="!(btnFlag == 0)"
+                    <select id="options" name="options" class="form-select m-1" [(ngModel)]="controlPanelObj.id"
+                        required #selectConfig="ngModel" [disabled]="!(btnFlag == 0)"
                         [ngClass]="{'is-invalid': !isConfigurationSelected && selectConfig.touched}">
                         <option value="0" disabled selected>Select a configuration</option>
                         @for (item of configurationList(); track $index) {
@@ -76,9 +75,9 @@
                         <span *ngIf="!isConfigurationSelected">This is required</span>
                     </div>
                     <label for="no_vendors" class="m-1">Enter the No. of Vendors</label>
-                    <input type="number" class="form-control m-1"
-                        id="no_vendors" name="no_vendors" #no_Vendors="ngModel" pattern="^[1-9]\d*$" required
-                        [(ngModel)]="controlPanelObj.noOfVendors" [disabled]="!(btnFlag === 0)"
+                    <input type="number" class="form-control m-1" id="no_vendors" name="no_vendors"
+                        #no_Vendors="ngModel" pattern="^[1-9]\d*$" required [(ngModel)]="controlPanelObj.noOfVendors"
+                        [disabled]="!(btnFlag === 0)"
                         [ngClass]="{'is-invalid': no_Vendors.invalid && no_Vendors.touched}" />
                     <div class="text-danger m-0" *ngIf="no_Vendors.touched">
                         <span *ngIf="no_Vendors?.errors?.['required']">This is required</span>
@@ -87,8 +86,8 @@
                     </div>
 
                     <label for="no_customers" class="m-1">Enter the No. of Customers</label>
-                    <input type="number" class="form-control m-1"
-                        id="no_customers" name="no_customers" #no_Customers="ngModel" pattern="^[1-9]\d*$" required
+                    <input type="number" class="form-control m-1" id="no_customers" name="no_customers"
+                        #no_Customers="ngModel" pattern="^[1-9]\d*$" required
                         [ngClass]="{'is-invalid': no_Customers.invalid && no_Customers.touched}"
                         [disabled]="!(btnFlag === 0)" [(ngModel)]="controlPanelObj.noOfCustomers" />
                     <div class="text-danger m-0" *ngIf="no_Customers.touched">
@@ -99,7 +98,7 @@
                 </div>
             </div>
 
-            <div class="col-5 d-flex flex-column justify-content-center control-panel-container">
+            <div class="col-5 d-flex flex-column justify-content-center control-panel-container" style="margin-top: auto; margin-bottom: auto; height: 200px;">
                 <h4 class="pt-3 text-center">Start/Stop the system</h4>
                 <div class="d-flex justify-content-center">
                     <button class="btn btn-primary m-1"
@@ -113,10 +112,9 @@
         </div>
     </form>
 
-    <div class="col-3 control-panel-container" style="margin: 0.4%;">
+    <div class="col-3 control-panel-container" style="margin-top: auto; margin-bottom: auto;">
         <app-ticket-status #ticketStatus></app-ticket-status>
     </div>
 </div>
 
 <app-log-viewer #logViewer></app-log-viewer>
-

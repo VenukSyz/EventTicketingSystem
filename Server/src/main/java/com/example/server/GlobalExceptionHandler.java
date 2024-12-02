@@ -1,6 +1,5 @@
 package com.example.server;
 
-import com.example.server.exceptions.DuplicateFieldException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +16,5 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<String> handleUnexpectedErrors(RuntimeException ex){
         return new ResponseEntity<>("An unexpected error occurred!", HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-    @ExceptionHandler(DuplicateFieldException.class)
-    public ResponseEntity<String> handleDuplicateFieldException(DuplicateFieldException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
 }

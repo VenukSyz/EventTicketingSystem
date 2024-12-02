@@ -2,7 +2,6 @@ package com.example.server.logic;
 
 import com.example.server.dto.ConfigurationDTO;
 import com.example.server.service.LogBroadcaster;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collections;

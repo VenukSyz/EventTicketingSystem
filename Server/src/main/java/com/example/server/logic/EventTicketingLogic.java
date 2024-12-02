@@ -1,7 +1,7 @@
 package com.example.server.logic;
 
 import com.example.server.dto.ConfigurationDTO;
-import com.example.server.service.LogBroadcaster;
+import com.example.server.service.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,20 +10,22 @@ import java.util.List;
 public class EventTicketingLogic {
     private final TicketPoolLogic ticketPool;
     private final ConfigurationDTO configuration;
-    private final List<Thread> vendorThreads = Collections.synchronizedList(new ArrayList<>());
-    private final List<Thread> customerThreads = Collections.synchronizedList(new ArrayList<>());
+    private final List<Thread> vendorThreads;
+    private final List<Thread> customerThreads;
     private final LogBroadcaster logBroadcaster;
+    private final int numVendors;
+    private final int numCustomers;
     private boolean running = false;  // System status flag
-    private int numVendors;
-    private int numCustomers;
 
     public EventTicketingLogic(LogBroadcaster logBroadcaster, ConfigurationDTO configuration, int numVendors, int numCustomers) {
         this.logBroadcaster = logBroadcaster;
+        this.vendorThreads = Collections.synchronizedList(new ArrayList<>());
+        this.customerThreads = Collections.synchronizedList(new ArrayList<>());
+
         // Initialize TicketPool with configuration values
         this.configuration = configuration;
         ticketPool = new TicketPoolLogic(this.logBroadcaster, this.configuration);
 
-        // Ask for the number of vendors and customers
         this.numVendors = numVendors;
         this.numCustomers = numCustomers;
 
@@ -34,7 +36,7 @@ public class EventTicketingLogic {
 
     private void createVendors(int numVendors) {
         for (int i = 0; i < numVendors; i++) {
-            VendorLogic vendor = new VendorLogic(logBroadcaster, ticketPool, configuration,"Vendor-" + (i + 1), "vendor" + (i + 1) + "@example.com", "1234567890");
+            VendorLogic vendor = new VendorLogic(logBroadcaster, ticketPool, configuration, "Vendor-" + (i + 1),"vendor" + (i + 1) + "@example.com","123456789" + (i + 1));
             Thread vendorThread = new Thread(vendor, "VendorThread-" + (i + 1));
             vendorThreads.add(vendorThread);
         }
@@ -42,7 +44,7 @@ public class EventTicketingLogic {
 
     private void createCustomers(int numCustomers) {
         for (int i = 0; i < numCustomers; i++) {
-            CustomerLogic customer = new CustomerLogic(logBroadcaster, ticketPool, configuration,"Customer-" + (i + 1), "customer" + (i + 1) + "@example.com", "0987654321");
+            CustomerLogic customer = new CustomerLogic(logBroadcaster, ticketPool, configuration, "Customer-" + (i + 1),"Customer-" + (i + 1) + "@example.com","123456789" + (i + 1));
             Thread customerThread = new Thread(customer, "CustomerThread-" + (i + 1));
             customerThreads.add(customerThread);
         }

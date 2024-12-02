@@ -1,14 +1,18 @@
 package com.example.server.logic;
 
+import com.example.server.service.LogBroadcaster;
+
 public abstract class UserLogic implements Runnable{
     private long id;
     private final TicketPoolLogic ticketPool;
+    private final LogBroadcaster logBroadcaster;
     private String name;
     private String email;
     private String phoneNum;
 
-    public UserLogic(long id, TicketPoolLogic ticketPool,String name, String email, String phoneNum) {
+    public UserLogic(long id, LogBroadcaster logBroadcaster, TicketPoolLogic ticketPool,String name, String email, String phoneNum) {
         this.id = id;
+        this.logBroadcaster = logBroadcaster;
         this.ticketPool = ticketPool;
         this.name = name;
         this.email = email;
@@ -29,6 +33,10 @@ public abstract class UserLogic implements Runnable{
 
     public String getName() {
         return name;
+    }
+
+    public LogBroadcaster getLogBroadcaster() {
+        return logBroadcaster;
     }
 
     public void setName(String name) {
