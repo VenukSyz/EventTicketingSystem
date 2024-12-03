@@ -73,7 +73,7 @@ export class ConfigurationFormComponent implements OnInit {
   onSaveUpdate(): void {
     this.configurationService.saveUpdateConfiguration(this.configurationObj).subscribe((result: IApiResponseModel) => {
       if(this.configurationObj.id === 0) {
-        alert("Configuration saved successfully!");
+        this.showSnackbar("Configuration saved successfully!");
       } else {
         this.showSnackbar("Configuration updated successfully!")
       }
