@@ -11,4 +11,5 @@ public class TicketStatusDTO {
     private int ticketsInPool;
     private int soldOutTickets;
     private int toBeSoldOutTickets;
+    private int ticketsAddedByVendors;
 }

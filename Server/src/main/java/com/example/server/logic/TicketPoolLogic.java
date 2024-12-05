@@ -93,5 +93,9 @@ public class TicketPoolLogic {
     public int getToBeSoldOutTickets() {
         return toBeSoldOutTickets;
     }
+
+    public int getTicketsAddedByVendors() {
+        return ticketsAddedByVendors.size();
+    }
 }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { TicketStatusService } from '../../services/ticket-status.service';
 import { CommonModule } from '@angular/common';
 
@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 })
 export class TicketStatusComponent implements OnInit{
   ticketStatus: any = null;
+  @Output() ticketsChanged = new EventEmitter<number>();
 
   constructor(private ticketStatusService: TicketStatusService) {}
 
@@ -19,6 +20,9 @@ export class TicketStatusComponent implements OnInit{
 
     this.ticketStatusService.ticketStatus$.subscribe((status) => {
       this.ticketStatus = status;
+      if (this.ticketStatus && this.ticketStatus.ticketsAddedByVendors !== undefined) {
+        this.emitTicketsToParent(this.ticketStatus.ticketsAddedByVendors);
+      }
     });
 
     if (btnFlag !== null) {
@@ -32,5 +36,9 @@ export class TicketStatusComponent implements OnInit{
   resetTicketStatus(): void {
     this.ticketStatus = null;
     sessionStorage.removeItem('status');
+  }
+
+  emitTicketsToParent(tickets: number): void {
+    this.ticketsChanged.emit(tickets);
   }
 }

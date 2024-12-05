@@ -111,10 +111,17 @@
             </div>
         </div>
     </form>
-
     <div class="col-3 control-panel-container" style="margin-top: auto; margin-bottom: auto;">
-        <app-ticket-status #ticketStatus></app-ticket-status>
+        <app-ticket-status #ticketStatus (ticketsChanged)="updateProgress($event)"></app-ticket-status>
     </div>
 </div>
+
+<div class="control-panel-container mx-auto" style="max-width: 975px;">
+    <h5>Ticket Capacity</h5>
+    <p style="margin-bottom: 0; text-align: end;">{{progress}}%</p>
+    <mat-progress-bar mode="determinate" [value]="progress"></mat-progress-bar>
+    <p style="margin-top: 2px; margin-bottom: 0;">{{start}}/{{max}}</p>
+</div>
+
 
 <app-log-viewer #logViewer></app-log-viewer>

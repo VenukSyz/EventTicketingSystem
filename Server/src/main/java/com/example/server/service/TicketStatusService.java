@@ -35,7 +35,7 @@ public class TicketStatusService {
     }
 
     public void sendTicketStatus(TicketPoolLogic ticketPool) {
-        TicketStatusDTO status = new TicketStatusDTO(ticketPool.getAvailableTicketsInPool(), ticketPool.getSoldOutTickets(), ticketPool.getToBeSoldOutTickets());
+        TicketStatusDTO status = new TicketStatusDTO(ticketPool.getAvailableTicketsInPool(), ticketPool.getSoldOutTickets(), ticketPool.getToBeSoldOutTickets(), ticketPool.getTicketsAddedByVendors());
         logBroadcaster.sendStatusUpdate(status);
     }
 }

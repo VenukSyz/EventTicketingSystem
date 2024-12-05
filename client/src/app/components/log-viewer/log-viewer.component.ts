@@ -1,4 +1,4 @@
-import { AfterViewChecked, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { WebSocketService } from '../../services/web-socket.service';
 import { CommonModule } from '@angular/common';
 
@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './log-viewer.component.html',
   styleUrl: './log-viewer.component.css'
 })
-export class LogViewerComponent implements OnInit, OnDestroy, AfterViewChecked {
+export class LogViewerComponent implements OnInit, OnDestroy {
   logs: string[] = [];
   @ViewChild('logContainer') logContainer!: ElementRef;
 
@@ -24,18 +24,6 @@ export class LogViewerComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.logs.push(message);
       sessionStorage.setItem('logs', JSON.stringify(this.logs));
     });
-  }
-
-  ngAfterViewChecked(): void {
-    this.scrollToBottom(); // Ensures the scroll stays at the bottom
-  }
-
-  scrollToBottom(): void {
-    try {
-      this.logContainer.nativeElement.scrollTop = this.logContainer.nativeElement.scrollHeight;
-    } catch (err) {
-      console.error('Failed to scroll:', err);
-    }
   }
 
   resetTheLogger(): void {

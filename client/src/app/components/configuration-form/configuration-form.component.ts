@@ -88,7 +88,7 @@ export class ConfigurationFormComponent implements OnInit {
 
   onDelete(id: number): void {
     this.configurationService.deleteConfiguration(id).subscribe((result: IApiResponseModel)=> {
-      alert("Configuration deleted successfully!");
+      this.showSnackbar("Configuration deleted successfully!");
       this.loadConfigurations();
     })
   }
