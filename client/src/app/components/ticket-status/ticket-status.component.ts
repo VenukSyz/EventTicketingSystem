@@ -11,17 +11,23 @@ import { CommonModule } from '@angular/common';
 })
 export class TicketStatusComponent implements OnInit{
   ticketStatus: any = null;
-  @Output() ticketsChanged = new EventEmitter<number>();
+  @Output() ticketsChanged = new EventEmitter<{ tickets: number, soldOutTickets: number }>();
 
   constructor(private ticketStatusService: TicketStatusService) {}
 
   ngOnInit(): void {
-    const btnFlag = sessionStorage.getItem('btnFlag');
-
+    let btnFlag = sessionStorage.getItem('btnFlag');
+    
     this.ticketStatusService.ticketStatus$.subscribe((status) => {
       this.ticketStatus = status;
       if (this.ticketStatus && this.ticketStatus.ticketsAddedByVendors !== undefined) {
-        this.emitTicketsToParent(this.ticketStatus.ticketsAddedByVendors);
+        btnFlag = sessionStorage.getItem('btnFlag');
+        if (btnFlag !== null) {
+          const flag: number = parseInt(btnFlag, 10);
+          if (flag != 0) {
+            this.emitTicketsToParent(this.ticketStatus.ticketsAddedByVendors,this.ticketStatus.soldOutTickets);
+          }
+        }
       }
     });
 
@@ -38,7 +44,7 @@ export class TicketStatusComponent implements OnInit{
     sessionStorage.removeItem('status');
   }
 
-  emitTicketsToParent(tickets: number): void {
-    this.ticketsChanged.emit(tickets);
+  emitTicketsToParent(tickets: number, soldOutTickets: number): void {
+    this.ticketsChanged.emit({tickets, soldOutTickets});
   }
 }

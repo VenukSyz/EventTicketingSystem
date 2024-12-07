@@ -10,11 +10,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { LogViewerComponent } from '../log-viewer/log-viewer.component';
 import { TicketStatusComponent } from '../ticket-status/ticket-status.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { TimelineChartComponent } from '../timeline-chart/timeline-chart.component';
 
 @Component({
   selector: 'app-control-panel',
   standalone: true,
-  imports: [FormsModule, CommonModule, LogViewerComponent, TicketStatusComponent, MatProgressBarModule],
+  imports: [FormsModule, CommonModule, LogViewerComponent, TicketStatusComponent, MatProgressBarModule, TimelineChartComponent],
   templateUrl: './control-panel.component.html',
   styleUrl: './control-panel.component.css'
 })
@@ -31,6 +32,7 @@ export class ControlPanelComponent implements OnInit{
   progress: number = 0;
   @ViewChild('logViewer') logViewer!: LogViewerComponent;
   @ViewChild('ticketStatus') ticketStatus!: TicketStatusComponent;
+  @ViewChild('timelineChart') timelineChart!: TimelineChartComponent;
 
   constructor(private snackBar: MatSnackBar) {}
 
@@ -84,6 +86,7 @@ export class ControlPanelComponent implements OnInit{
     this.setSessionStorageForProgressBar();
     this.logViewer.resetTheLogger();
     this.ticketStatus.resetTicketStatus();
+    this.timelineChart.resetChart();
     this.showSnackbar("The system reset");
     sessionStorage.setItem('btnFlag',this.btnFlag.toString());
   }
@@ -109,11 +112,15 @@ export class ControlPanelComponent implements OnInit{
     }
   }
 
-  updateProgress(tickets: number): void {
-    this.start = tickets + this.totalTickets;
+  updateProgress(event: {tickets: number, soldOutTickets: number}): void {
+    this.start = event.tickets + this.totalTickets;
     this.progress = Math.floor((this.start / this.max) * 100);
-    this.setSessionStorage('start', this.start)
-    this.setSessionStorage('progress', this.progress)
+    this.setSessionStorage('start', this.start);
+    this.setSessionStorage('progress', this.progress);
+    debugger;
+    if (this.timelineChart) {
+      this.timelineChart.updateChart(event.soldOutTickets);
+    }
   }
 
   setSessionStorage(name: string, obj: number) {
