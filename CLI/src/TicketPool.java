@@ -2,15 +2,31 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Manages the pool of tickets in the ticketing system.
+ * Allows vendors to add tickets and customers to retrieve tickets, ensuring synchronization
+ * for concurrent operations in a multithreaded environment.
+ */
 public class TicketPool {
+    /** List of tickets currently available in the pool. */
     private final List<Integer> availableTicketsInPool;
+    /** List of tickets added by vendors to the pool. */
     private final List<Integer> ticketsAddedByVendors;
+    /** List of tickets that have been sold out. */
     private final List<Integer> soldOutTickets;
+    /** Maximum capacity of tickets the pool can hold. */
     private final int maxCapacity;
+    /** Maximum number of tickets that can be added by vendors. */
     private final int maxTicketsToAdd;
+    /** Number of tickets remaining to be sold. */
     private int toBeSoldOutTickets;
+    /** Number of tickets that's being added to the pool when the system starts. */
     private int totalTickets;
 
+    /**
+     * Initializes the ticket pool with the specified configuration values.
+     * Preloads the pool with tickets based on the initial total ticket count.
+     */
     public TicketPool() {
         super();
         this.availableTicketsInPool = Collections.synchronizedList(new ArrayList<>());
@@ -26,6 +42,14 @@ public class TicketPool {
         }
     }
 
+    /**
+     * Allows a vendor to add tickets to the pool.
+     * Ensures the addition respects the maximum capacity and tickets addition limit.
+     *
+     * @param tickets the number of tickets to be added.
+     * @param name the name of the vendor attempting to add tickets.
+     * @return true if tickets were successfully added, false otherwise.
+     */
     public synchronized boolean addTickets(int tickets, String name) {
         if (ticketsAddedByVendors.size() == maxTicketsToAdd) {
             System.out.println("Cannot add " + tickets + " tickets by " + name + ". Vendor addition limit reached.");

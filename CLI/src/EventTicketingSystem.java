@@ -3,14 +3,28 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Represents the Real-Time Event Ticketing System.
+ * This system manages vendors and customers interacting with a shared {@link TicketPool}.
+ * Vendors release tickets into the pool, and customers retrieve them in a synchronized multithreaded environment.
+ */
 public class EventTicketingSystem {
+    /** The shared pool of tickets for the system. */
     private TicketPool ticketPool;
+    /** List of threads representing vendors in the system. */
     private final List<Thread> vendorThreads = Collections.synchronizedList(new ArrayList<>());
+    /** List of threads representing customers in the system. */
     private final List<Thread> customerThreads = Collections.synchronizedList(new ArrayList<>());
-    private boolean running = false;  // System status flag
+    /** Flag indicating whether the system is running. */
+    private boolean running = false;
+    /** Number of vendor threads in the system. */
     private int numVendors;
+    /** Number of customer threads in the system. */
     private int numCustomers;
 
+    /**
+     * Constructs the Event Ticketing System and initializes its configuration and components.
+     */
     public EventTicketingSystem() {
         // Load or initialize configuration
         System.out.println("=== Real-Time Event Ticketing System ===");
@@ -18,6 +32,9 @@ public class EventTicketingSystem {
         initializeSystem();
     }
 
+    /**
+     * Initializes the system by configuring settings, creating the ticket pool, and setting up vendors and customers.
+     */
     private void initializeSystem() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Load configuration from file or Enter 'No' to initialize a config manually? (yes/no): ");
@@ -50,6 +67,12 @@ public class EventTicketingSystem {
         createCustomers(numCustomers);
     }
 
+    /**
+     * Prompts the user to input a positive integer.
+     *
+     * @param prompt the message displayed to the user for input.
+     * @return a positive integer input by the user.
+     */
     private int getPositiveIntegerInput(String prompt) {
         Scanner scanner = new Scanner(System.in);
         int number = 0;
@@ -67,6 +90,11 @@ public class EventTicketingSystem {
         return number;
     }
 
+    /**
+     * Creates the specified number of vendor threads and adds them to the vendor thread list.
+     *
+     * @param numVendors the number of vendors to create.
+     */
     private void createVendors(int numVendors) {
         for (int i = 0; i < numVendors; i++) {
             Vendor vendor = new Vendor(ticketPool, "Vendor-" + (i + 1), "vendor" + (i + 1) + "@example.com", "1234567890");
@@ -75,6 +103,11 @@ public class EventTicketingSystem {
         }
     }
 
+    /**
+     * Creates the specified number of customer threads and adds them to the customer thread list.
+     *
+     * @param numCustomers the number of customers to create.
+     */
     private void createCustomers(int numCustomers) {
         for (int i = 0; i < numCustomers; i++) {
             Customer customer = new Customer(ticketPool, "Customer-" + (i + 1), "customer" + (i + 1) + "@example.com", "0987654321");
@@ -83,6 +116,9 @@ public class EventTicketingSystem {
         }
     }
 
+    /**
+     * Starts the system by running all vendor and customer threads.
+     */
     public void start() {
         if (running) {
             System.out.println("System is already running.");
@@ -111,6 +147,9 @@ public class EventTicketingSystem {
         }
     }
 
+    /**
+     * Stops the system by interrupting all vendor and customer threads.
+     */
     public void stop() {
         if (!running) {
             System.out.println("System is not running.");
@@ -135,6 +174,9 @@ public class EventTicketingSystem {
         }
     }
 
+    /**
+     * Resets the system by reinitializing all configurations and components.
+     */
     public void reset() {
         if (running) {
             System.out.println("System must be stopped before resetting.");
@@ -145,6 +187,10 @@ public class EventTicketingSystem {
         initializeSystem();
     }
 
+    /**
+     * Displays the current status of the system, including running state,
+     * number of vendors and customers, and ticket pool statistics.
+     */
     public void checkStatus() {
         System.out.println("=== System Status ===");
         System.out.println("Running: " + running);
@@ -155,6 +201,12 @@ public class EventTicketingSystem {
         System.out.println("Total Tickets to be sold out: " + ticketPool.getToBeSoldOutTickets());
     }
 
+    /**
+     * Main entry point of the application. Allows the user to interact with the system
+     * via a command-line interface.
+     *
+     * @param args command-line arguments (not used).
+     */
     public static void main(String[] args) {
         EventTicketingSystem system = new EventTicketingSystem();
         Scanner scanner = new Scanner(System.in);

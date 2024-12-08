@@ -4,17 +4,35 @@ import java.io.*;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+/**
+ * The Configuration class manages the configuration of a ticketing system,
+ * including initialization, validation, saving, and loading of configuration data.
+ */
 public class Configuration {
+    /** Maximum ticket capacity of the system. */
     private static int maxTicketCapacity;
+    /** Total number of tickets initially available in the ticket pool. */
     private static int totalTickets;
+    /** Number of tickets released by vendors at a time. */
     private static int ticketsPerRelease;
+    /** Time interval (in milliseconds) between ticket releases. */
     private static int releaseIntervalMilliseconds;
+    /** Number of tickets retrieved by customers at a time. */
     private static int ticketsPerRetrieval;
+    /** Time interval (in milliseconds) between ticket retrievals. */
     private static int retrievalIntervalMilliseconds;
 
+    /** Gson instance for JSON serialization and deserialization. */
     private static final Gson gson = new Gson();
+    /** Scanner instance for user input. */
     private static final Scanner input = new Scanner(System.in);
 
+    /**
+     * Validates user input to ensure it is a positive integer.
+     *
+     * @param inputMessage the message displayed to the user for input.
+     * @return a positive integer entered by the user.
+     */
     private static int validateInput(String inputMessage) {
         while(true) {
             System.out.print(inputMessage);
@@ -32,6 +50,13 @@ public class Configuration {
         }
     }
 
+    /**
+     * Validates user input to ensure it is a positive integer within a specified limit.
+     *
+     * @param inputMessage the message displayed to the user for input.
+     * @param maxLimit the maximum allowable value.
+     * @return a positive integer within the specified limit.
+     */
     private static int validateWithLimit(String inputMessage, int maxLimit) {
         while (true) {
             int value = validateInput(inputMessage);
@@ -43,6 +68,9 @@ public class Configuration {
         }
     }
 
+    /**
+     * Initializes the configuration by prompting the user for input.
+     */
     public static void initialize() {
         System.out.println("=== Initializing System Configuration ===");
         maxTicketCapacity = validateInput("Enter the max ticket capacity: ");
@@ -53,6 +81,11 @@ public class Configuration {
         retrievalIntervalMilliseconds = validateInput("Enter the retrieval interval in milliseconds: ");
     }
 
+    /**
+     * Prompts the user to enter a file name and ensures it ends with ".json".
+     *
+     * @return a valid JSON file name.
+     */
     private static String getFileName() {
         while(true) {
             System.out.print("Enter the file name: ");
@@ -65,6 +98,9 @@ public class Configuration {
         }
     }
 
+    /**
+     * Saves the current configuration to a JSON file.
+     */
     public static void saveToFile() {
         String fileName = getFileName();
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
@@ -75,6 +111,10 @@ public class Configuration {
         }
     }
 
+    /**
+     * Loads the configuration from a JSON file. If the file is missing or invalid,
+     * the user is given options to re-enter the file name or configure settings manually.
+     */
     public static void loadFromFile() {
         String fileName;
         while (true) {
@@ -118,10 +158,11 @@ public class Configuration {
         } catch (IOException e) {
             System.out.println("An error occurred while loading configuration: " + e.getMessage() + "\n");
         }
-
     }
 
-    // Inner class to represent the configuration data structure for Gson
+    /**
+     * Inner class representing the configuration data structure for Gson serialization/deserialization.
+     */
     private static class ConfigurationData {
         private int maxTicketCapacity = Configuration.maxTicketCapacity;
         private int totalTickets = Configuration.totalTickets;
@@ -131,7 +172,12 @@ public class Configuration {
         private int retrievalIntervalMilliseconds = Configuration.retrievalIntervalMilliseconds;
     }
 
-    // Helper method to validate configuration data
+    /**
+     * Validates the configuration data to ensure all values are positive and constraints are satisfied.
+     *
+     * @param data the configuration data to validate.
+     * @return true if the data is valid, false otherwise.
+     */
     private static boolean isConfigurationDataValid(ConfigurationData data) {
         return data.maxTicketCapacity > 0 &&
                 data.totalTickets > 0 &&
@@ -144,7 +190,9 @@ public class Configuration {
                 data.ticketsPerRetrieval <= data.maxTicketCapacity;
     }
 
-    // Method to display the loaded configuration
+    /**
+     * Displays the loaded configuration to the user.
+     */
     private static void displayLoadedConfiguration() {
         System.out.println("=== Loaded Configuration ===");
         System.out.println("Max Ticket Capacity: " + maxTicketCapacity);
@@ -156,6 +204,7 @@ public class Configuration {
         System.out.println("============================\n");
     }
 
+    // Getters for configuration values
     public static int getMaxTicketCapacity() {
         return maxTicketCapacity;
     }
