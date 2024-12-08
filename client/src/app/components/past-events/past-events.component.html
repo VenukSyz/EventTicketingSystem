@@ -1,0 +1,51 @@
+<div class="row pt-3 d-flex justify-content-center" style="margin-top: 80px;">
+    <div class="col-10">
+        <div class="card">
+            <div class="card-header text-center">
+                Event History
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        @if (isLoader) {
+                        <div class="col-12 text-center">
+                            <div class="spinner-border text-primary"></div>
+                        </div>
+                        } @else {
+                        <table class="table table-bordered custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Event Name</th>
+                                    <th>Ticket Price</th>
+                                    <th>Max Capacity</th>
+                                    <th>Sold Out Ticket Amount</th>
+                                    <th>Ticket Sales(LKR)</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (eventList().length === 0) {
+                                <tr>
+                                    <td colspan="7" class="text-center"><b>No past events</b></td>
+                                </tr>
+                                } @else {
+                                    @for (item of eventList(); track $index) {
+                                    <tr>
+                                        <td>{{item.eventName}}</td>
+                                        <td>{{item.ticketPrice}}</td>
+                                        <td>{{item.maxCapacity}}</td>
+                                        <td>{{item.soldOutTickets}}</td>
+                                        <td>{{item.ticketPrice * item.soldOutTickets}}</td>
+                                        <td><button class="btn btn-danger" (click)="onDelete(item.id)">Delete</button></td>
+                                    </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

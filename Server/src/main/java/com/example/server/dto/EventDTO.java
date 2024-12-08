@@ -4,13 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ControlPanelDTO {
+@Data
+public class EventDTO {
     private long id;
     private String eventName;
     private float ticketPrice;
-    private int noOfVendors;
-    private int noOfCustomers;
+    private int maxCapacity;
+    private int soldOutTickets;
 }

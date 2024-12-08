@@ -28,7 +28,7 @@ public class ConfigurationController {
     }
 
     @DeleteMapping("/deleteConfiguration/{id}")
-    public boolean deleteConfiguration(@PathVariable Long id) {
-        return configurationService.deleteConfiguration(id);
+    public ResponseEntity<ApiResponse<Boolean>> deleteConfiguration(@PathVariable Long id) {
+        return ResponseEntity.ok(new ApiResponse<>(configurationService.deleteConfiguration(id)));
     }
 }

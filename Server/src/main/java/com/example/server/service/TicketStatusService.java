@@ -1,8 +1,10 @@
 package com.example.server.service;
 
+import com.example.server.dto.EventDTO;
 import com.example.server.dto.TicketStatusDTO;
 import com.example.server.logic.TicketPoolLogic;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +12,8 @@ import java.util.concurrent.ScheduledFuture;
 
 @Service
 public class TicketStatusService {
-
+    @Autowired
+    private EventService eventService;
     private final LogBroadcaster logBroadcaster;
     private final ThreadPoolTaskScheduler taskScheduler;
     private ScheduledFuture<?> scheduledTask;
@@ -20,9 +23,9 @@ public class TicketStatusService {
         this.taskScheduler = taskScheduler;
     }
 
-    public void startTicketStatusUpdates(TicketPoolLogic ticketPool) {
+    public void startTicketStatusUpdates(TicketPoolLogic ticketPool, EventDTO eventDTO) {
         if (scheduledTask == null || scheduledTask.isCancelled()) {
-            scheduledTask = taskScheduler.scheduleAtFixedRate(() -> sendTicketStatus(ticketPool), 2000);
+            scheduledTask = taskScheduler.scheduleAtFixedRate(() -> sendTicketStatus(ticketPool, eventDTO), 2000);
             System.out.println("System started: Ticket updates are now running.");
         }
     }
@@ -34,8 +37,15 @@ public class TicketStatusService {
         }
     }
 
-    public void sendTicketStatus(TicketPoolLogic ticketPool) {
-        TicketStatusDTO status = new TicketStatusDTO(ticketPool.getAvailableTicketsInPool(), ticketPool.getSoldOutTickets(), ticketPool.getToBeSoldOutTickets(), ticketPool.getTicketsAddedByVendors());
+    public void sendTicketStatus(TicketPoolLogic ticketPool, EventDTO eventDTO) {
+        TicketStatusDTO status = new TicketStatusDTO(
+                ticketPool.getAvailableTicketsInPool(),
+                ticketPool.getSoldOutTickets(), ticketPool.
+                getToBeSoldOutTickets(),
+                ticketPool.getTicketsAddedByVendors(),
+                ticketPool.getSoldOutTickets() * eventDTO.getTicketPrice());
+        eventDTO.setSoldOutTickets(ticketPool.getSoldOutTickets());
+        eventService.saveUpdateEvent(eventDTO);
         logBroadcaster.sendStatusUpdate(status);
     }
 }

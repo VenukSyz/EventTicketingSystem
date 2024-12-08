@@ -12,4 +12,5 @@ public class TicketStatusDTO {
     private int soldOutTickets;
     private int toBeSoldOutTickets;
     private int ticketsAddedByVendors;
+    private float ticketSales;
 }

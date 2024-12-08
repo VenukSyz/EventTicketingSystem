@@ -43,6 +43,7 @@ export class ControlPanelComponent implements OnInit{
     this.updateFromSessionStorage('start');
     this.updateFromSessionStorage('progress');
     this.loadConfigurations();
+    this.loadControlPanelFromSession();
   }
 
   loadConfigurations(): void {
@@ -59,6 +60,7 @@ export class ControlPanelComponent implements OnInit{
       });
       const selectedConfig = this.configurationList().find(config => config.id == this.controlPanelObj.id);
       this.initializeProgressBar(selectedConfig?.maxTicketCapacity, selectedConfig?.totalTickets);
+      this.saveControlPanelToSession();
     } else {
       this.controlPanelService.resumeSystem().subscribe((result: IApiResponseModel) => {
         this.showSnackbar(result.data);
@@ -87,6 +89,7 @@ export class ControlPanelComponent implements OnInit{
     this.logViewer.resetTheLogger();
     this.ticketStatus.resetTicketStatus();
     this.timelineChart.resetChart();
+    sessionStorage.removeItem('controlPanelObj');
     this.showSnackbar("The system reset");
     sessionStorage.setItem('btnFlag',this.btnFlag.toString());
   }
@@ -138,6 +141,17 @@ export class ControlPanelComponent implements OnInit{
     const savedValue = sessionStorage.getItem(key);
     if (savedValue !== null) {
       (this as any)[key] = parseInt(savedValue, 10);
+    }
+  }
+
+  saveControlPanelToSession(): void {
+    sessionStorage.setItem('controlPanelObj', JSON.stringify(this.controlPanelObj));
+  }
+
+  loadControlPanelFromSession(): void {
+    const controlPanelJSON = sessionStorage.getItem('controlPanelObj');
+    if (controlPanelJSON) {
+      this.controlPanelObj = JSON.parse(controlPanelJSON);
     }
   }
 }

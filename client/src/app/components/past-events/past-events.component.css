@@ -1,0 +1,18 @@
+.card {
+    background: rgba(255, 255, 255, 0.356);
+    backdrop-filter: blur(10px);
+    border: none;
+}
+
+.card-header {
+    background-color: #5F1E9F;
+    color: white;
+}
+
+.custom-table {
+    --bs-table-bg: rgba(255, 255, 255, 0.404);
+    /* Light blue background */
+    color: #000000;
+    /* Dark text color */
+    border-radius: 10px;
+}

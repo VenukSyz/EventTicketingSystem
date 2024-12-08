@@ -1,4 +1,6 @@
-<nav class="navbar navbar-expand-sm navbar-dark" [ngClass]="{'scrolled': isScrolled}">
+<div class="d-flex flex-column min-vh-100">
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-sm navbar-dark" [ngClass]="{'scrolled': isScrolled}">
     <div class="container-fluid">
       <a class="navbar-brand d-flex align-items-center" href="javascript:void(0)">
         <img src="ticket.png" alt="Logo" style="width:30px; height:30px; margin-right:10px;">
@@ -6,17 +8,27 @@
       </a>
       <div class="collapse navbar-collapse" id="mynavbar">
         <ul class="navbar-nav me-auto">
-          <li class="nav-item" >
+          <li class="nav-item">
             <a class="nav-link active" routerLink="/configuration-form" routerLinkActive="active">Configuration Form</a>
           </li>
-          <li class="nav-item" >
+          <li class="nav-item">
             <a class="nav-link" routerLink="/control-panel" routerLinkActive="active">Control Panel</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/past-events" routerLinkActive="active">Past Events</a>
           </li>
         </ul>
       </div>
     </div>
-</nav>
-<div class="container pt-1"  >
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container pt-1 flex-grow-1">
     <router-outlet></router-outlet>
+  </div>
+
+  <!-- Footer -->
+  <footer class="mt-auto" style="background-color: black; height: 65px; color: white; text-align: center; display: flex; justify-content: center; align-items: center; font-size: 13px;">
+    &copy; 2024 Venuk De Soyza. All rights reserved.
+  </footer>
 </div>
-<footer class="" style="background-color: black; height: 65px; color: white; text-align: center; display: flex; justify-content: center; align-items: center; font-size: 13px;">&copy; 2024 Venuk De Soyza. All rights reserved.</footer>

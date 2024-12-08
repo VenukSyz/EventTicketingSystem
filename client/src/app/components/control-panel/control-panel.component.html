@@ -1,4 +1,4 @@
-<div class="row pt-3 d-flex justify-content-center" style="margin-top: 80px;">
+<div class="row pt-3 d-flex justify-content-center" style="margin-top: 80px; margin-bottom: auto;">
     <div class="col-10">
         <div class="card">
             <div class="card-header text-center">
@@ -53,6 +53,33 @@
 </div>
 <div class="row pt-3 d-flex justify-content-center">
     <form #form="ngForm" class="col-6">
+        <div class="col text-center control-panel-container">
+            <h3 class="pt-3 text-center"
+                style="border-bottom: 2px solid #000000; padding-bottom: 10px; margin-right: 10%; margin-left: 10%;">
+                Event Details</h3>
+            <div class="col-10 pb-3 mx-auto">
+                <label for="no_vendors" class="m-1">Event Name</label>
+                <input type="text" id="event_name" #event_Name="ngModel" name="event_name" required
+                    [ngClass]="{'is-invalid': event_Name.invalid && event_Name.touched}" [(ngModel)]="controlPanelObj.eventName"
+                    class="form-control m-1"/>
+                <div class="text-danger m-0" *ngIf="event_Name.touched">
+                    <span *ngIf="event_Name?.errors?.['required']">This is required</span>
+                </div>
+
+                <label for="ticket_price" class="m-1">Ticket Price (LKR)</label>
+                <input type="number" class="form-control m-1" id="ticket_price" name="ticket_price"
+                    #ticket_Price="ngModel" pattern="^(?:[1-9]\d*(?:\.\d{1,2})?|0\.\d{1,2})$" required [(ngModel)]="controlPanelObj.ticketPrice"
+                    [disabled]="!(btnFlag === 0)"
+                    [ngClass]="{'is-invalid': ticket_Price.invalid && ticket_Price.touched}" />
+                <div class="text-danger m-0" *ngIf="ticket_Price.touched">
+                    <span *ngIf="ticket_Price?.errors?.['required']">This is required</span>
+                    <span *ngIf="ticket_Price?.errors?.['pattern']">Enter a number
+                        greater than 0 and maximum of 2 decimals</span>
+                </div>
+            </div>
+            
+
+        </div>
         <div class="row justify-content-center">
             <div class="col-6 text-center control-panel-container">
                 <h3 class="pt-3 text-center"
