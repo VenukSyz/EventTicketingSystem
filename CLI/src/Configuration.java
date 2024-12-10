@@ -1,4 +1,5 @@
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import java.io.*;
 import java.util.InputMismatchException;
@@ -74,7 +75,7 @@ public class Configuration {
     public static void initialize() {
         System.out.println("=== Initializing System Configuration ===");
         maxTicketCapacity = validateInput("Enter the max ticket capacity: ");
-        totalTickets = validateWithLimit("Enter total number of tickets available in the pool: ", maxTicketCapacity);
+        totalTickets = validateWithLimit("Enter total number of tickets available in the pool: ", maxTicketCapacity - 1);
         ticketsPerRelease = validateWithLimit("Enter the number of tickets each vendor will release at a time: ", maxTicketCapacity - totalTickets);
         releaseIntervalMilliseconds = validateInput("Enter the release interval in milliseconds: ");
         ticketsPerRetrieval = validateWithLimit("Enter the number of tickets each customer will attempt to retrieve at a time: ", maxTicketCapacity);
@@ -116,48 +117,58 @@ public class Configuration {
      * the user is given options to re-enter the file name or configure settings manually.
      */
     public static void loadFromFile() {
-        String fileName;
         while (true) {
+            String fileName;
             fileName = getFileName();
-            File file = new File(fileName);
+            while (true) {
+                File file = new File(fileName);
 
-            // Check if the file exists
-            if (!file.exists()) {
-                System.out.println("File " + fileName + " does not exist.\n");
-                System.out.print("Enter '1' to re-enter the file name, or '2' to manually configure settings: ");
-                String choice = input.nextLine().trim();
+                // Check if the file exists
+                if (!file.exists()) {
+                    System.out.println("File " + fileName + " does not exist.\n");
+                    while (true) {
+                        System.out.print("Enter '1' to re-enter the file name, or '2' to manually configure settings: ");
+                        String choice = input.nextLine().trim();
 
-                if (choice.equals("2")) {
-                    initialize();  // Prompt user to manually configure settings
-                    return;
-                } else if (choice.equals("1")) {
-                    continue;
-                } else {
-                    System.out.println("Invalid option. Please enter '1' or '2'.");
+                        if (choice.equals("2")) {
+                            initialize();  // Prompt user to manually configure settings
+                            return;
+                        } else if (choice.equals("1")) {
+                            fileName = getFileName();
+                            break;
+                        } else {
+                            System.out.println("Invalid option. Please enter '1' or '2'.");
+                        }
+                    }
+                } else{
+                    break;
                 }
+            }
 
-            } else{
-                break;
+            try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+                ConfigurationData data = gson.fromJson(reader, ConfigurationData.class);
+                if (data != null && isConfigurationDataValid(data)) {
+                    maxTicketCapacity = data.maxTicketCapacity;
+                    totalTickets = data.totalTickets;
+                    ticketsPerRelease = data.ticketsPerRelease;
+                    releaseIntervalMilliseconds = data.releaseIntervalMilliseconds;
+                    ticketsPerRetrieval = data.ticketsPerRetrieval;
+                    retrievalIntervalMilliseconds = data.retrievalIntervalMilliseconds;
+                    System.out.println("Configuration loaded from " + fileName + "\n");
+                    displayLoadedConfiguration();
+                    return;
+                } else {
+                    System.out.println("Configuration file is missing required data or contains invalid values.\n");
+                }
+            } catch (IOException e) {
+                System.out.println("An error occurred while loading configuration: " + e.getMessage() + "\n");
+            } catch (JsonSyntaxException e) {
+                System.out.println("Invalid JSON syntax in the configuration file: " + e.getMessage() + "\n");
+            } catch (NumberFormatException e) {
+                System.out.println("An error occurred while parsing a number in the configuration file: " + e.getMessage() + "\n");
             }
         }
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
-            ConfigurationData data = gson.fromJson(reader, ConfigurationData.class);
-            if (data != null && isConfigurationDataValid(data)) {
-                maxTicketCapacity = data.maxTicketCapacity;
-                totalTickets = data.totalTickets;
-                ticketsPerRelease = data.ticketsPerRelease;
-                releaseIntervalMilliseconds = data.releaseIntervalMilliseconds;
-                ticketsPerRetrieval = data.ticketsPerRetrieval;
-                retrievalIntervalMilliseconds = data.retrievalIntervalMilliseconds;
-                System.out.println("Configuration loaded from " + fileName + "\n");
-                displayLoadedConfiguration();
-            } else {
-                System.out.println("Configuration file is missing required data or contains invalid values.\n");
-            }
-        } catch (IOException e) {
-            System.out.println("An error occurred while loading configuration: " + e.getMessage() + "\n");
-        }
     }
 
     /**
@@ -185,7 +196,7 @@ public class Configuration {
                 data.releaseIntervalMilliseconds > 0 &&
                 data.ticketsPerRetrieval > 0 &&
                 data.retrievalIntervalMilliseconds > 0 &&
-                data.totalTickets <= data.maxTicketCapacity &&
+                data.totalTickets < data.maxTicketCapacity &&
                 data.ticketsPerRelease <= (data.maxTicketCapacity - data.totalTickets) &&
                 data.ticketsPerRetrieval <= data.maxTicketCapacity;
     }

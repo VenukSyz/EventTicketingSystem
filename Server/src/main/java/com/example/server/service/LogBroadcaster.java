@@ -18,7 +18,6 @@ public class LogBroadcaster {
     public LogBroadcaster(SimpMessagingTemplate messagingTemplate) {
         this.messagingTemplate = messagingTemplate;
         formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
     }
 
     public void log(String message) {

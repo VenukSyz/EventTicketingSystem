@@ -55,7 +55,7 @@ public abstract class User implements Runnable{
      *
      * @param id the new ID for the user.
      */
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

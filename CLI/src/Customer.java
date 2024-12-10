@@ -38,9 +38,9 @@ public class Customer extends User{
                         break;
                     }
                 }
-                boolean success = this.getTicketPool().removeTickets(ticketsPerRetrieval, this.getName());
+                boolean ticketsBought = this.getTicketPool().removeTickets(ticketsPerRetrieval, this.getName());
 
-                if (!success) {
+                if (!ticketsBought) {
                     synchronized (System.out) {
                         System.out.println(this.getName() + " could not retrieve tickets");
                     }

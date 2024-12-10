@@ -1,1 +1,0 @@
-{"maxTicketCapacity":100,"totalTickets":20,"ticketsPerRelease":4,"releaseIntervalMilliseconds":5000,"ticketsPerRetrieval":2,"retrievalIntervalMilliseconds":2000}

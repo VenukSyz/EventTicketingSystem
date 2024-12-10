@@ -11,10 +11,14 @@ import java.util.Scanner;
 public class EventTicketingSystem {
     /** The shared pool of tickets for the system. */
     private TicketPool ticketPool;
-    /** List of threads representing vendors in the system. */
-    private final List<Thread> vendorThreads = Collections.synchronizedList(new ArrayList<>());
+    /** List of Customer objects. */
+    private List<Customer> customers;
+    /** List of Vendor objects. */
+    private List<Vendor> vendors;
     /** List of threads representing customers in the system. */
-    private final List<Thread> customerThreads = Collections.synchronizedList(new ArrayList<>());
+    private final List<Thread> customerThreads;
+    /** List of threads representing vendors in the system. */
+    private final List<Thread> vendorThreads;
     /** Flag indicating whether the system is running. */
     private boolean running = false;
     /** Number of vendor threads in the system. */
@@ -26,6 +30,8 @@ public class EventTicketingSystem {
      * Constructs the Event Ticketing System and initializes its configuration and components.
      */
     public EventTicketingSystem() {
+        vendorThreads = Collections.synchronizedList(new ArrayList<>());
+        customerThreads = Collections.synchronizedList(new ArrayList<>());
         // Load or initialize configuration
         System.out.println("=== Real-Time Event Ticketing System ===");
         // Initialize TicketPool with configuration values
@@ -37,26 +43,35 @@ public class EventTicketingSystem {
      */
     private void initializeSystem() {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Load configuration from file or Enter 'No' to initialize a config manually? (yes/no): ");
-        String loadFromFile = scanner.nextLine().trim().toLowerCase();
+        customers = new ArrayList<>();
+        vendors = new ArrayList<>();
+        while (true) {
+            System.out.print("Load configuration from file or Enter 'No' to initialize a config manually? (yes/no): ");
+            String loadFromFile = scanner.nextLine().trim().toLowerCase();
 
-        if (loadFromFile.equals("yes")) {
-            Configuration.loadFromFile();
-        } else {
-            Configuration.initialize();
-            while (true) {
-                System.out.print("Would you like to save the current configuration to a file? (yes/no): ");
-                String saveToFile = scanner.nextLine().trim().toLowerCase();
-                if (saveToFile.equals("yes")) {
-                    Configuration.saveToFile();
-                    break;
-                } else if (saveToFile.equals("no")) {
-                    break;
-                } else {
-                    System.out.println("Invalid input! Try again.\n");
+            if (loadFromFile.equals("yes")) {
+                Configuration.loadFromFile();
+                break;
+            } else if (loadFromFile.equals("no")) {
+                Configuration.initialize();
+                while (true) {
+                    System.out.print("Would you like to save the current configuration to a file? (yes/no): ");
+                    String saveToFile = scanner.nextLine().trim().toLowerCase();
+                    if (saveToFile.equals("yes")) {
+                        Configuration.saveToFile();
+                        break;
+                    } else if (saveToFile.equals("no")) {
+                        break;
+                    } else {
+                        System.out.println("Invalid input! Try again.\n");
+                    }
                 }
+                break;
+            } else {
+                System.out.println("Invalid input! Try again.\n");
             }
         }
+
 
         ticketPool = new TicketPool();
 
@@ -96,10 +111,18 @@ public class EventTicketingSystem {
      * @param numVendors the number of vendors to create.
      */
     private void createVendors(int numVendors) {
-        for (int i = 0; i < numVendors; i++) {
-            Vendor vendor = new Vendor(ticketPool, "Vendor-" + (i + 1), "vendor" + (i + 1) + "@example.com", "1234567890");
-            Thread vendorThread = new Thread(vendor, "VendorThread-" + (i + 1));
-            vendorThreads.add(vendorThread);
+        if (vendors.isEmpty()) {
+            for (int i = 0; i < numVendors; i++) {
+                Vendor vendor = new Vendor(ticketPool, "Vendor-" + (i + 1), "vendor" + (i + 1) + "@example.com", "1234567890");
+                Thread vendorThread = new Thread(vendor, "VendorThread-" + (i + 1));
+                vendorThreads.add(vendorThread);
+            }
+        } else {
+            for (int i = 0; i < numVendors; i++) {
+                Vendor vendor = vendors.get(i);
+                Thread vendorThread = new Thread(vendor, "VendorThread-" + (i + 1));
+                vendorThreads.add(vendorThread);
+            }
         }
     }
 
@@ -109,10 +132,18 @@ public class EventTicketingSystem {
      * @param numCustomers the number of customers to create.
      */
     private void createCustomers(int numCustomers) {
-        for (int i = 0; i < numCustomers; i++) {
-            Customer customer = new Customer(ticketPool, "Customer-" + (i + 1), "customer" + (i + 1) + "@example.com", "0987654321");
-            Thread customerThread = new Thread(customer, "CustomerThread-" + (i + 1));
-            customerThreads.add(customerThread);
+        if (customers.isEmpty()) {
+            for (int i = 0; i < numCustomers; i++) {
+                Customer customer = new Customer(ticketPool, "Customer-" + (i + 1), "customer" + (i + 1) + "@example.com", "0987654321");
+                Thread customerThread = new Thread(customer, "CustomerThread-" + (i + 1));
+                customerThreads.add(customerThread);
+            }
+        } else {
+            for (int i = 0; i < numCustomers; i++) {
+                Customer customer = customers.get(i);
+                Thread customerThread = new Thread(customer, "CustomerThread-" + (i + 1));
+                customerThreads.add(customerThread);
+            }
         }
     }
 
