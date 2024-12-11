@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ChartDataset, ChartOptions, ChartType, Chart, registerables } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
-import * as dayjs from 'dayjs';
 import 'chartjs-adapter-moment'
 
 
@@ -15,15 +14,17 @@ Chart.register(...registerables)
   styleUrl: './timeline-chart.component.css'
 })
 export class TimelineChartComponent implements OnInit{
+  /** Reference to the chart directive to manipulate chart instance directly */
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
+  /** Tracks the total number of tickets sold */
   soldTickets: number = 0;
   
   ngOnInit(): void {
-    debugger;
     this.loadChartDataFromSession();
   }
 
+  /** Chart data for plotting tickets sold over time */
   public lineChartData: ChartDataset[] = [
     {
       data: [],
@@ -39,8 +40,10 @@ export class TimelineChartComponent implements OnInit{
     }
   ];
 
+  /** Labels for the chart (timestamps for each ticket sale) */
   public lineChartLabels: string[] = [];
 
+  /** Configuration options for the chart */
   public lineChartOptions: ChartOptions = {
     responsive: true,
     plugins: {
@@ -93,9 +96,17 @@ export class TimelineChartComponent implements OnInit{
     },
   };
 
+  /** Whether to show the legend on the chart */
   public lineChartLegend = true;
+
+  /** Defines the type of the chart (line chart in this case) */
   public lineChartType: ChartType = 'line';
 
+  /**
+   * Updates the chart with new ticket data.
+   * Adds a new timestamp and ticket count to the chart.
+   * @param newTicketsSold The total number of tickets sold.
+   */
   public updateChart(newTicketsSold: number): void {
     // Create the timestamp (current time) for each new data point
     const currentTimestamp = new Date().toISOString(); // Full timestamp including seconds
@@ -113,6 +124,10 @@ export class TimelineChartComponent implements OnInit{
     }
   }
 
+  /**
+   * Resets the chart data and clears sessionStorage.
+   * Also resets the soldTickets counter.
+   */
   public resetChart(): void {
     // Clear chart data and labels
     this.lineChartLabels = [];
@@ -129,6 +144,9 @@ export class TimelineChartComponent implements OnInit{
     }
   }
 
+  /**
+   * Saves the current chart data to sessionStorage.
+   */
   private saveChartDataToSession(): void {
     const chartData = {
       labels: this.lineChartLabels,
@@ -138,6 +156,9 @@ export class TimelineChartComponent implements OnInit{
     sessionStorage.setItem('chartData', JSON.stringify(chartData));
   }
 
+  /**
+   * Loads chart data from sessionStorage if available.
+   */
   private loadChartDataFromSession(): void {
     const storedData = sessionStorage.getItem('chartData');
     if (storedData) {

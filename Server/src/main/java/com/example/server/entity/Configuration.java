@@ -6,6 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
+/**
+ * Entity representing the configuration settings for the ticketing system.
+ * This class stores the configuration details that determine the behavior of the system,
+ * such as ticket capacity, release and retrieval intervals, and ticket management rules.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

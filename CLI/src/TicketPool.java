@@ -72,6 +72,14 @@ public class TicketPool {
         return true;
     }
 
+    /**
+     * Allows a customer to remove tickets from the pool.
+     * Waits if there are not enough tickets available and notifies threads upon completion.
+     *
+     * @param tickets the number of tickets to be removed.
+     * @param name the name of the customer attempting to retrieve tickets.
+     * @return true if tickets were successfully retrieved, false otherwise.
+     */
     public synchronized boolean removeTickets(int tickets, String name) {
         while(availableTicketsInPool.size() < tickets) {
             System.out.println("Not enough tickets available. "+ name + " is waiting...");
@@ -99,14 +107,29 @@ public class TicketPool {
         return true;
     }
 
+    /**
+     * Retrieves the number of tickets currently available in the pool.
+     *
+     * @return the size of the available tickets list.
+     */
     public int getAvailableTicketsInPool() {
         return availableTicketsInPool.size();
     }
 
+    /**
+     * Retrieves the number of tickets that have been sold out.
+     *
+     * @return the size of the sold-out tickets list.
+     */
     public int getSoldOutTickets() {
         return soldOutTickets.size();
     }
 
+    /**
+     * Retrieves the number of tickets remaining to be sold.
+     *
+     * @return the number of tickets left to be sold.
+     */
     public int getToBeSoldOutTickets() {
         return toBeSoldOutTickets;
     }

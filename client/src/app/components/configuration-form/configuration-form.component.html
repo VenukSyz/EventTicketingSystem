@@ -8,17 +8,16 @@
             <div class="card-body">
                 <form #form="ngForm">
                     <div class="row g-3 p-3">
-                        <label for="name">Configuration Name: </label>
+                        <label for="name">Configuration Name:<span style="color: red;">*</span></label>
                         <input type="text" id="name" #nameConf="ngModel" name="name" required
                             [ngClass]="{'is-invalid': nameConf.invalid && nameConf.touched}"
-                             [(ngModel)]="configurationObj.name" class="form-control" minlength="4"/>
+                             [(ngModel)]="configurationObj.name" class="form-control"/>
                         <div class="text-danger m-0" *ngIf="nameConf.touched">
                             <span *ngIf="nameConf?.errors?.['required']">This is required</span>
-                            <span *ngIf="nameConf?.errors?.['minlength']">Minimum length is 4 characters.</span>
                             <span *ngIf="!isConfigurationNameAvailable">The name is already in saved configurations</span>
                         </div>
 
-                        <label for="max_tickets">Max ticket capacity: </label>
+                        <label for="max_tickets">Max ticket capacity:<span style="color: red;">*</span></label>
                         <input type="number" id="max_tickets" #max_Tickets="ngModel" name="max_tickets" required
                             [ngClass]="{'is-invalid': max_Tickets.invalid && max_Tickets.touched}"
                             pattern="^[1-9]\d*$" [(ngModel)]="configurationObj.maxTicketCapacity" class="form-control"/>
@@ -28,8 +27,7 @@
                                 greater than 0</span>
                         </div>
 
-
-                        <label for="total_tickets">Total tickets available in the pool:</label>
+                        <label for="total_tickets">Total tickets available in the pool:<span style="color: red;">*</span></label>
                         <input type="number" id="total_tickets" name="total_tickets" #total_Tickets="ngModel" required
                             [ngClass]="{'is-invalid': total_Tickets.invalid && total_Tickets.touched || (!isTotalTicketsValid && total_Tickets.touched)}"
                             pattern="^[1-9]\d*$" [disabled]="!max_Tickets.valid" [(ngModel)]="configurationObj.totalTickets" class="form-control"/>
@@ -42,7 +40,7 @@
                             </span>
                         </div>
 
-                        <label for="tickets_per_release">Number of tickets each vendor will release at a time: </label>
+                        <label for="tickets_per_release">Number of tickets each vendor will release at a time:<span style="color: red;">*</span></label>
                         <input type="number" id="tickets_per_release" name="tickets_per_release"
                             #tickets_Per_Release="ngModel" required pattern="^[1-9]\d*$" [(ngModel)]="configurationObj.ticketsPerRelease"
                             [ngClass]="{'is-invalid': tickets_Per_Release.invalid && tickets_Per_Release.touched || (!isTicketPerReleaseValid &&  tickets_Per_Release.touched)}"
@@ -57,7 +55,7 @@
                         </div>
 
                         <label for="release_interval">Enter the release interval in
-                            milliseconds: </label>
+                            milliseconds:<span style="color: red;">*</span></label>
 
                         <input type="number" id="release_interval" name="release_interval" #release_Interval="ngModel"
                             [ngClass]="{'is-invalid': release_Interval.invalid && release_Interval.touched}"
@@ -69,7 +67,7 @@
                                 number greater than 0</span>
                         </div>
 
-                        <label for="tickers_per_retrieval">Number of tickets each customer will attempt to retrieve at a time: </label>
+                        <label for="tickers_per_retrieval">Number of tickets each customer will attempt to retrieve at a time:<span style="color: red;">*</span></label>
                         <input type="number" id="tickers_per_retrieval" name="tickers_per_retrieval"
                             [ngClass]="{'is-invalid': tickets_Per_Retrieval.invalid && tickets_Per_Retrieval.touched || (!isTicketsPerRetrievalValid && tickets_Per_Retrieval.touched)}"
                             #tickets_Per_Retrieval="ngModel" required [disabled]="!release_Interval.valid"
@@ -84,7 +82,7 @@
                             </span>
                         </div>
 
-                        <label for="retrieval_interval">Enter the retrieval interval in milliseconds: </label>
+                        <label for="retrieval_interval">Enter the retrieval interval in milliseconds:<span style="color: red;">*</span></label>
                         <input type="number" id="retrieval_interval" name="retrieval_interval"
                             #retrieval_Interval="ngModel" required [disabled]="!tickets_Per_Retrieval.valid"
                             [ngClass]="{'is-invalid': retrieval_Interval.invalid && retrieval_Interval.touched }"
@@ -156,7 +154,7 @@
                                         <td>{{item.releaseIntervalMilliseconds}}</td>
                                         <td>{{item.ticketsPerRetrieval}}</td>
                                         <td>{{item.retrievalIntervalMilliseconds}}</td>
-                                        <td><button class="btn btn-primary" (click)="onEdit(item)">Edit</button></td>
+                                        <td><button class="btn btn-primary" (click)="onEdit(item); showSnackbar('If you don\'t want to make changes to the configuration, click the \'Reset\' button to discard any edits.')">Edit</button></td>
                                         <td><button class="btn btn-danger" (click)="onDelete(item.id)">Delete</button></td>
                                     </tr>
                                     }

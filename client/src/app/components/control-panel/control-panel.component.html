@@ -58,15 +58,15 @@
                 style="border-bottom: 2px solid #000000; padding-bottom: 10px; margin-right: 10%; margin-left: 10%;">
                 Event Details</h3>
             <div class="col-10 pb-3 mx-auto">
-                <label for="no_vendors" class="m-1">Event Name</label>
-                <input type="text" id="event_name" #event_Name="ngModel" name="event_name" required
+                <label for="no_vendors" class="m-1">Event Name<span style="color: red;">*</span></label>
+                <input type="text" id="event_name" #event_Name="ngModel" name="event_name" required [disabled]="!(btnFlag === 0)"
                     [ngClass]="{'is-invalid': event_Name.invalid && event_Name.touched}" [(ngModel)]="controlPanelObj.eventName"
                     class="form-control m-1"/>
                 <div class="text-danger m-0" *ngIf="event_Name.touched">
                     <span *ngIf="event_Name?.errors?.['required']">This is required</span>
                 </div>
 
-                <label for="ticket_price" class="m-1">Ticket Price (LKR)</label>
+                <label for="ticket_price" class="m-1">Ticket Price (LKR)<span style="color: red;">*</span></label>
                 <input type="number" class="form-control m-1" id="ticket_price" name="ticket_price"
                     #ticket_Price="ngModel" pattern="^(?:[1-9]\d*(?:\.\d{1,2})?|0\.\d{1,2})$" required [(ngModel)]="controlPanelObj.ticketPrice"
                     [disabled]="!(btnFlag === 0)"
@@ -87,10 +87,10 @@
                     Load Configuration</h3>
                 <div class="col-10 pb-3 mx-auto">
                     <label for="options" class="m-1">
-                        <h6>Select Configuration</h6>
+                        <h6>Select Configuration<span style="color: red;">*</span></h6>
                     </label>
 
-                    <select id="options" name="options" class="form-select m-1" [(ngModel)]="controlPanelObj.id"
+                    <select id="options" name="options" class="form-select m-1" [(ngModel)]="controlPanelObj.configId"
                         required #selectConfig="ngModel" [disabled]="!(btnFlag == 0)"
                         [ngClass]="{'is-invalid': !isConfigurationSelected && selectConfig.touched}">
                         <option value="0" disabled selected>Select a configuration</option>
@@ -101,10 +101,11 @@
                     <div class="text-danger" *ngIf="selectConfig.touched">
                         <span *ngIf="!isConfigurationSelected">This is required</span>
                     </div>
-                    <label for="no_vendors" class="m-1">Enter the No. of Vendors</label>
+
+                    <label for="no_vendors" class="m-1">Enter the No. of Vendors<span style="color: red;">*</span></label>
                     <input type="number" class="form-control m-1" id="no_vendors" name="no_vendors"
                         #no_Vendors="ngModel" pattern="^[1-9]\d*$" required [(ngModel)]="controlPanelObj.noOfVendors"
-                        [disabled]="!(btnFlag === 0)"
+                        [disabled]="!(btnFlag === 0 || btnFlag === 2)"
                         [ngClass]="{'is-invalid': no_Vendors.invalid && no_Vendors.touched}" />
                     <div class="text-danger m-0" *ngIf="no_Vendors.touched">
                         <span *ngIf="no_Vendors?.errors?.['required']">This is required</span>
@@ -112,11 +113,11 @@
                             greater than 0</span>
                     </div>
 
-                    <label for="no_customers" class="m-1">Enter the No. of Customers</label>
+                    <label for="no_customers" class="m-1">Enter the No. of Customers<span style="color: red;">*</span></label>
                     <input type="number" class="form-control m-1" id="no_customers" name="no_customers"
                         #no_Customers="ngModel" pattern="^[1-9]\d*$" required
                         [ngClass]="{'is-invalid': no_Customers.invalid && no_Customers.touched}"
-                        [disabled]="!(btnFlag === 0)" [(ngModel)]="controlPanelObj.noOfCustomers" />
+                        [disabled]="!(btnFlag === 0 || btnFlag === 2)" [(ngModel)]="controlPanelObj.noOfCustomers" />
                     <div class="text-danger m-0" *ngIf="no_Customers.touched">
                         <span *ngIf="no_Customers?.errors?.['required']">This is required</span>
                         <span *ngIf="no_Customers?.errors?.['pattern']">Enter a number
@@ -129,7 +130,7 @@
                 <h4 class="pt-3 text-center">Start/Stop the system</h4>
                 <div class="d-flex justify-content-center">
                     <button class="btn btn-primary m-1"
-                        [disabled]="btnFlag === 0 ? !form.valid || !isConfigurationSelected: (btnFlag === 2 ? false: true) "
+                        [disabled]="btnFlag === 0 ? !form.valid || !isConfigurationSelected: (btnFlag === 2 ? !form.valid || !isConfigurationSelected: true) "
                         (click)="onStart()">{{(btnFlag != 0) ? "Resume" : "Start"}}</button>
                     <button class="btn btn-danger m-1" [disabled]="!(btnFlag === 1)" (click)="onStop()">Stop</button>
                     <button class="btn btn-secondary m-1" [disabled]="!(btnFlag === 2)"
@@ -144,7 +145,7 @@
 </div>
 
 <div class="control-panel-container mx-auto" style="max-width: 975px;">
-    <h5>Ticket Capacity</h5>
+    <h5>Max Ticket Capacity</h5>
     <p style="margin-bottom: 0; text-align: end;">{{progress}}%</p>
     <mat-progress-bar mode="determinate" [value]="progress"></mat-progress-bar>
     <p style="margin-top: 2px; margin-bottom: 0;">{{start}}/{{max}}</p>

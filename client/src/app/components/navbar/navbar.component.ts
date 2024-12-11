@@ -10,8 +10,13 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
+  /** Tracks whether the navbar should appear scrolled (e.g., apply a shadow or background change). */
   isScrolled: boolean = false;
 
+  /**
+   * Listens to the window scroll event and updates `isScrolled` based on the scroll position.
+   * Sets `isScrolled` to true if the vertical scroll exceeds 50 pixels.
+   */
   @HostListener('window:scroll', [])
   onWindowScroll() {
     const scrollY = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;

@@ -7,6 +7,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Handles ticket pool operations such as adding and removing tickets.
+ * This class manages the available tickets, tickets added by vendors, and sold-out tickets
+ * while adhering to the constraints set by the system configuration.
+ */
 public class TicketPoolLogic {
     private final List<Integer> availableTicketsInPool;
     private final List<Integer> ticketsAddedByVendors;
@@ -17,6 +22,12 @@ public class TicketPoolLogic {
     private int totalTickets;
     private final LogBroadcaster logBroadcaster;
 
+    /**
+     * Constructs the TicketPoolLogic with the specified parameters.
+     *
+     * @param logBroadcaster the log broadcaster for logging messages
+     * @param configuration  the configuration containing initial ticket information and constraints
+     */
     public TicketPoolLogic(LogBroadcaster logBroadcaster, ConfigurationDTO configuration) {
         super();
         this.logBroadcaster = logBroadcaster;
@@ -33,6 +44,13 @@ public class TicketPoolLogic {
         }
     }
 
+    /**
+     * Adds tickets to the pool by a vendor.
+     *
+     * @param tickets the number of tickets to add
+     * @param name    the name of the vendor attempting to add tickets
+     * @return {@code true} if tickets were successfully added, {@code false} otherwise
+     */
     public synchronized boolean addTickets(int tickets, String name) {
         if (ticketsAddedByVendors.size() == maxTicketsToAdd) {
             logBroadcaster.log("Cannot add " + tickets + " tickets by " + name + ". Vendor addition limit reached.");
@@ -55,6 +73,14 @@ public class TicketPoolLogic {
         return true;
     }
 
+    /**
+     * Removes tickets from the pool for a customer.
+     * If there are not enough tickets available, the customer will wait until tickets are added.
+     *
+     * @param tickets the number of tickets to remove
+     * @param name    the name of the customer attempting to remove tickets
+     * @return {@code true} if tickets were successfully removed, {@code false} otherwise
+     */
     public synchronized boolean removeTickets(int tickets, String name) {
         while(availableTicketsInPool.size() < tickets) {
             logBroadcaster.log("Not enough tickets available. "+ name + " is waiting...");
@@ -82,18 +108,38 @@ public class TicketPoolLogic {
         return true;
     }
 
+    /**
+     * Gets the number of available tickets in the pool.
+     *
+     * @return the number of available tickets
+     */
     public int getAvailableTicketsInPool() {
         return availableTicketsInPool.size();
     }
 
+    /**
+     * Gets the number of tickets that have been sold out.
+     *
+     * @return the number of sold-out tickets
+     */
     public int getSoldOutTickets() {
         return soldOutTickets.size();
     }
 
+    /**
+     * Gets the number of tickets remaining to be sold out.
+     *
+     * @return the number of tickets remaining to be sold out
+     */
     public int getToBeSoldOutTickets() {
         return toBeSoldOutTickets;
     }
 
+    /**
+     * Gets the number of tickets added by vendors.
+     *
+     * @return the number of tickets added by vendors
+     */
     public int getTicketsAddedByVendors() {
         return ticketsAddedByVendors.size();
     }

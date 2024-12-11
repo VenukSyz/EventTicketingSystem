@@ -6,6 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
+/**
+ * Entity representing an event in the ticketing system.
+ * This class stores the event details, such as the event name, ticket price, capacity, and sold-out ticket count.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

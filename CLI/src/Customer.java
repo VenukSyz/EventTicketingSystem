@@ -26,6 +26,14 @@ public class Customer extends User{
         this.retrievalIntervalMilliseconds = Configuration.getRetrievalIntervalMilliseconds();
     }
 
+    /**
+     * Executes the customer's ticket retrieval process in a loop.
+     * The customer attempts to retrieve tickets from the ticket pool at regular intervals.
+     * The process stops when there are not enough tickets left in the pool to satisfy the retrieval request
+     * or if the thread is interrupted.
+     *
+     * @inheritDoc
+     */
     @Override
     public void run() {
         try {

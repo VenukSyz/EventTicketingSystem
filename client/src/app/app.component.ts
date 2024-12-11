@@ -11,6 +11,13 @@ import { filter, map } from 'rxjs';
   styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit {
+  /**
+   * The constructor initializes the component with the necessary services.
+   * 
+   * @param router - The Angular router service to manage navigation.
+   * @param activatedRoute - The service for accessing route information.
+   * @param titleService - The service for managing the document's title.
+   */
   constructor (private router: Router, private activatedRoute: ActivatedRoute, private titleService: Title ) {}
   
   ngOnInit(): void {

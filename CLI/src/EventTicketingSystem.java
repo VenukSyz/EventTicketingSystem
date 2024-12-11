@@ -114,6 +114,7 @@ public class EventTicketingSystem {
         if (vendors.isEmpty()) {
             for (int i = 0; i < numVendors; i++) {
                 Vendor vendor = new Vendor(ticketPool, "Vendor-" + (i + 1), "vendor" + (i + 1) + "@example.com", "1234567890");
+                vendors.add(vendor);
                 Thread vendorThread = new Thread(vendor, "VendorThread-" + (i + 1));
                 vendorThreads.add(vendorThread);
             }
@@ -135,6 +136,7 @@ public class EventTicketingSystem {
         if (customers.isEmpty()) {
             for (int i = 0; i < numCustomers; i++) {
                 Customer customer = new Customer(ticketPool, "Customer-" + (i + 1), "customer" + (i + 1) + "@example.com", "0987654321");
+                customers.add(customer);
                 Thread customerThread = new Thread(customer, "CustomerThread-" + (i + 1));
                 customerThreads.add(customerThread);
             }
@@ -160,7 +162,7 @@ public class EventTicketingSystem {
         running = true;
 
         // Check if vendor and customer threads are empty; if so, recreate them
-        if (vendorThreads.isEmpty() || customerThreads.isEmpty()) {
+        if (vendorThreads.isEmpty() && customerThreads.isEmpty()) {
             createVendors(numVendors);
             createCustomers(numCustomers);
         }

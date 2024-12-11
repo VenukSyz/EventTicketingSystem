@@ -30,6 +30,7 @@ public class Vendor extends User{
     /**
      * Periodically releases tickets into the {@link TicketPool}.
      * The process continues until the pool is full or the vendor is interrupted.
+     * @inheritDoc
      */
     @Override
     public void run() {

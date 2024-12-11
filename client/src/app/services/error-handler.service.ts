@@ -7,8 +7,20 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class ErrorHandlerService implements ErrorHandler {
 
+  /**
+   * Creates an instance of ErrorHandlerService.
+   * @param snackBar - The MatSnackBar instance used for displaying error messages.
+   */
   constructor(private snackBar: MatSnackBar) {} 
 
+  /**
+   * Handles the error and displays an appropriate message to the user.
+   * This method is invoked whenever an error occurs in the application.
+   * It categorizes errors into HTTP, client-side, TypeError, ReferenceError, or general errors.
+   * It also logs the error and shows the error message in a snack bar.
+   * 
+   * @param error - The error object that occurred. Can be an instance of HttpErrorResponse, ErrorEvent, TypeError, ReferenceError, or any other error.
+   */
   handleError(error: any): void {
     let errorMessage = "An unknown error occurred";
 

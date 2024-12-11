@@ -215,27 +215,56 @@ public class Configuration {
         System.out.println("============================\n");
     }
 
-    // Getters for configuration values
+    /**
+     * Retrieves the maximum ticket capacity of the system.
+     *
+     * @return the maximum ticket capacity.
+     */
     public static int getMaxTicketCapacity() {
         return maxTicketCapacity;
     }
 
+    /**
+     * Retrieves the total number of tickets initially available in the ticket pool.
+     *
+     * @return the total number of tickets.
+     */
     public static int getTotalTickets() {
         return totalTickets;
     }
 
+    /**
+     * Retrieves the number of tickets released by vendors at a time.
+     *
+     * @return the number of tickets per release.
+     */
     public static int getTicketsPerRelease() {
         return ticketsPerRelease;
     }
 
+    /**
+     * Retrieves the time interval (in milliseconds) between ticket releases.
+     *
+     * @return the release interval in milliseconds.
+     */
     public static int getReleaseIntervalMilliseconds() {
         return releaseIntervalMilliseconds;
     }
 
+    /**
+     * Retrieves the number of tickets retrieved by customers at a time.
+     *
+     * @return the number of tickets per retrieval.
+     */
     public static int getTicketsPerRetrieval() {
         return ticketsPerRetrieval;
     }
 
+    /**
+     * Retrieves the time interval (in milliseconds) between ticket retrievals.
+     *
+     * @return the retrieval interval in milliseconds.
+     */
     public static int getRetrievalIntervalMilliseconds() {
         return retrievalIntervalMilliseconds;
     }
