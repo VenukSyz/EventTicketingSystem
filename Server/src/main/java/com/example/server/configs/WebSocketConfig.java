@@ -18,6 +18,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/websocket").setAllowedOrigins("http://localhost:4200").withSockJS(); // WebSocket endpoint with SockJS fallback
+        registry.addEndpoint("/websocket").setAllowedOrigins("http://localhost:4200", "https://event-ticketing-system-eight.vercel.app").withSockJS(); // WebSocket endpoint with SockJS fallback
     }
 }
