@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping(value = "api/controlPanel")
-@CrossOrigin(origins = {"http://localhost:4200", "https://event-ticketing-system-eight.vercel.app/"})
+@CrossOrigin(origins = {"http://localhost:4200", "https://event-ticketing-system-eight.vercel.app"})
 public class ControlPanelController {
     @Autowired
     private ConfigurationService configurationService;
