@@ -1,6 +1,6 @@
 export const environment = {
     production: true,
-    API_URL: "https://ticketing-system-g8lc.onrender.com/api",
-    WEBSOCKET_URL: "https://ticketing-system-g8lc.onrender.com/websocket"
+    API_URL: "https://ticketing-system-s6vn.onrender.com/api",
+    WEBSOCKET_URL: "https://ticketing-system-s6vn.onrender.com/websocket"
 };
   
