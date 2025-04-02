@@ -1,4 +1,4 @@
 export const environment = {
-    API_URL: "https://ticketing-system-g8lc.onrender.com/api",
-    WEBSOCKET_URL: "https://ticketing-system-g8lc.onrender.com/websocket"
+    API_URL: "http://localhost:8080/api",
+    WEBSOCKET_URL: "http://localhost:8080/websocket"
 };

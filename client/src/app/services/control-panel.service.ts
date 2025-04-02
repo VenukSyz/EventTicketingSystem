@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { ControlPanel } from '../model/class/ControlPanel';
 import { Observable } from 'rxjs';
 import { IApiResponseModel } from '../model/interface/api';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 import { Constant } from '../constant/Constant';
 
 @Injectable({
